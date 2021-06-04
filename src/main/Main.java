@@ -2,6 +2,8 @@ package main;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ForkJoinPool;
@@ -11,6 +13,7 @@ import fgbml.mofgbml.MoFGBML;
 import fgbml.multilabel.MultiLabel;
 import fgbml.multilabel.binary_relevance.BinaryRelevance_ver1;
 import fgbml.multilabel.label_power_set.LabelPowerSet_ver1;
+import fgbml.multitask.MultiTask;
 import fgbml.subdivision.Subdivision;
 import method.MersenneTwisterFast;
 import method.Output;
@@ -34,6 +37,15 @@ import method.ResultMaster;
  * args[4] : int : parallelCores<br>
  * args[5] : String : saveDir<br>
  * </p>
+ *
+ * <p>
+ * Setting.isOneExe = true の場合<br>
+ * args[6] : int : rep_i<br>
+ * args[7] : int : cv_i<br>
+ * args[8] : String : id<br>
+ * これらはstartExperiment()に渡される前に配列argsから削除されnewArgsを作る
+ * </p>
+ *
  */
 public class Main {
 
@@ -77,14 +89,83 @@ public class Main {
 		System.out.println(start);
 
 		/* ********************************************************* */
-		//Repeat x-fold cross-validation
-		repeatExection(args);
+		if(Setting.isOnceExe) {
+			//Execute one trial
+			oneExection(args);
+		}
+		else {
+			//Repeat x-fold cross-validation
+			repeatExection(args);
+		}
 		/* ********************************************************* */
 
 		Date end = new Date();
 		System.out.println("END: ");
 		System.out.println(end);
 		/* ********************************************************* */
+	}
+
+	public static void oneExection(String[] args) {
+		/* ********************************************************* */
+		int rep_i = Integer.parseInt(args[6]);
+		int cv_i = Integer.parseInt(args[7]);
+		String id = args[8];
+		ArrayList<String> tmp = new ArrayList<>(Arrays.asList(args));
+		tmp.remove(6);	//rep_i
+		tmp.remove(6);	//cv_i
+		tmp.remove(6);	//id
+		String[] newArgs = tmp.toArray(new String[0]);
+
+		/* ********************************************************* */
+		//The names of files
+		String sep = File.separator;
+		String traFile = System.getProperty("user.dir") + sep + "dataset" + sep + Setting.dataName + sep + "a" + rep_i + "_" + cv_i + "_" + Setting.dataName + "-10tra.dat";
+		String tstFile = System.getProperty("user.dir") + sep + "dataset" + sep + Setting.dataName + sep + "a" + rep_i + "_" + cv_i + "_" + Setting.dataName + "-10tst.dat";
+
+		/* ********************************************************* */
+		//Make result directries
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd-HHmm");
+		//format: ".\result\iris_20191021-1255"
+		String resultRoot = System.getProperty("user.dir") + sep + "result" + sep
+							+ Setting.saveDir + sep + Setting.dataName + "_" + id;
+		Output.mkdirs(resultRoot);
+
+		/* ********************************************************* */
+		//Result Master
+		ResultMaster resultMaster = new ResultMaster(resultRoot, id);
+		//make now trial Directory
+		resultMaster.setNowRep(rep_i);
+		resultMaster.setNowCV(cv_i);
+		resultMaster.setTrialRoot(resultRoot + sep + "trial" + rep_i+cv_i);
+		Output.mkdirs(resultMaster.getTrialRoot());
+
+		/* ********************************************************* */
+		//Output "Experimental Settings"
+		String consts = (new Consts()).getStaticValues();
+		String settings = (new Setting()).getStaticValues();
+		String fileName = resultMaster.getTrialRoot() + sep + "Consts_" + rep_i+cv_i + ".txt";
+		Output.writeln(fileName, consts);
+		fileName = resultMaster.getTrialRoot() + sep + "Setting_" + rep_i+cv_i + ".txt";
+		Output.writeln(fileName, settings);
+
+		/* ********************************************************* */
+		//Experiment
+		Experiment main = setExperiment();
+
+		MersenneTwisterFast rnd = new MersenneTwisterFast(Setting.seed);
+
+		System.out.println(Setting.dataName + " : TRIAL: " + rep_i + cv_i);
+		main.startExperiment(newArgs,
+							 traFile, tstFile,
+							 rnd, resultMaster);
+		System.out.println();
+
+		/* ********************************************************* */
+		//Output Times
+		fileName = resultMaster.getTrialRoot() + sep + "Times_" + rep_i+cv_i + ".csv";
+		resultMaster.outputTimes(fileName);
+
 	}
 
 	public static void repeatExection(String[] args) {
@@ -170,6 +251,9 @@ public class Main {
 			break;
 		case "LabelPowerSet":
 			main = new LabelPowerSet_ver1();
+			break;
+		case "MultiTask":
+			main = new MultiTask();
 			break;
 		}
 

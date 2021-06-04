@@ -24,8 +24,8 @@ import java.util.ResourceBundle;
 public class Consts {
 
 	//OS
-	public static int WINDOWS = 0;	//windows
-	public static int UNIX = 1;	//unix
+	public static int WINDOWS = 0;	/**/ //windows
+	public static int UNIX = 1;	/**/ //unix
 
 	//Experiment's Parameters - 実験設定パラメータ
 	public static boolean IS_RANDOM_PATTERN_SELECT = false;	//ランダムなパターンで組む
@@ -49,28 +49,28 @@ public class Consts {
 
 	//GBML's parameters
 	/** don't careにしない条件部の数 */
-	public static int ANTECEDENT_LEN = 5;
+	public static int ANTECEDENT_LEN = 5;	/**/
 	/** don't care適応確率 */
-	public static double DONT_CARE_RT = 0.8;
+	public static double DONT_CARE_RT = 0.8;	/**/
 	/** don't careを確率で行う */
 	public static boolean IS_PROBABILITY_DONT_CARE = false;
 	/** ミシガン操作時にルールを追加する（置き換えでなく） */
-	public static boolean DO_ADD_RULES = false;
+	public static boolean DO_ADD_RULES = true;
 	/** ES型個体群更新戦略 */
 	public static boolean IS_ES_UPDATE = false;
 
 	/** Michigan適用確率 */
-	public static double RULE_OPE_RT = 0.5;
+	public static double RULE_OPE_RT = 0.5;/**/
 	/** Michigan交叉確率 */
-	public static double RULE_CROSS_RT = 0.9;
+	public static double RULE_CROSS_RT = 0.9;/**/
 	/** ルール入れ替え割合 */
-	public static double RULE_CHANGE_RT = 0.2;
+	public static double RULE_CHANGE_RT = 0.2;/**/
 	/** Michigan型GAの際のルール生成数 (true: 1, false: RULE_CHANGE_RT) */
 	public static boolean RATE_OR_ONLY = false;
 
 	public static boolean DO_LOG_PER_LOG = true;	//ログでログを出力
 	/** Pittsburgh交叉確率 */
-	public static double RULESET_CROSS_RT = 0.9;
+	public static double RULESET_CROSS_RT = 0.9;/**/
 
 	//NSGA-II's Parameters
 	public static int NSGA2 = 0;	//NSGA-IIの番号
@@ -113,6 +113,7 @@ public class Consts {
 	//Fuzzy System's parameters
     /**
      * <h1>ファジィ集合の初期化方法</h1>
+     * <h1>The methodology of knowledge base (fuzzy sets) initilization</h1>
      * 0: 2-5分割 homogeneous triangle fuzzy partitions.<br>
      * 1: Input XML file<br>
      * 2: Inhomogeneous<br>
@@ -126,12 +127,12 @@ public class Consts {
 	public static double FUZZY_GRADE = 0.5;
 	public static int FUZZY_SET_NUM = 14;			//ファジィ集合の種類数
 	/** 初期ル―ル数 */
-	public static int INITIATION_RULE_NUM = 30;
+	public static int INITIATION_RULE_NUM = 30;/**/
 	public static int MAX_FUZZY_DIVIDE_NUM = 5;	//条件部の分割数の最大値
 	/** 1識別器あたりの最大ルール数 */
-	public static int MAX_RULE_NUM = 60;
+	public static int MAX_RULE_NUM = 60;/**/
 	/** 1識別器あたりの最小ルール数 */
-	public static int MIN_RULE_NUM = 1;
+	public static int MIN_RULE_NUM = 1;/**/
 	/** ヒューリスティック生成法 */
 	public static boolean DO_HEURISTIC_GENERATION = true;
 	public static int DC_LABEL = 0;	//don't careを表すファジィ集合ラベル
@@ -142,7 +143,7 @@ public class Consts {
 	public static boolean MULTI_LABEL_PROBLEM = false;	//マルチラベル問題用
 
 	/** 0:各ラベルへのCF平均, 1:各ラベルへのCFベクトル */
-	public static int MULTI_CF_TYPE = 0;
+	public static int MULTI_CF_TYPE = 1;
 
 	//One Objective Weights
 	public static int W1 = 1000;
@@ -151,30 +152,30 @@ public class Consts {
 
 	//Other parametaers
 	/** 表示する世代間隔 */
-	public static int PER_SHOW_GENERATION_NUM = 100;
+	public static int PER_SHOW_GENERATION_NUM = 100;/**/
 	/** 詳細表示するドット間隔 */
-	public static int PER_SHOW_GENERATION_DETAIL = 10;
+	public static int PER_SHOW_GENERATION_DETAIL = 10;/**/
 	public static int WAIT_SECOND = 300000;
 	public static int TIME_OUT_TIME = 30000;
 	public static int SLEEP_TIME = 1000;
 
-	public static int TRAIN = 0;	//学習用データインデックス
-	public static int TEST = 1;	//評価用データインデックス
+	public static int TRAIN = 0;/**/	//学習用データインデックス
+	public static int TEST = 1;/**/	//評価用データインデックス
 
 
 	//Folders' Name
-	public static String ROOTFOLDER = "result";
-	public static String RULESET = "ruleset";
-	public static String INDIVIDUAL = "individual";
-	public static String POPULATION = "population";
-	public static String OFFSPRING = "offspring";
-	public static String SUBDATA = "subdata";
+	public static String ROOTFOLDER = "result";/**/
+	public static String RULESET = "ruleset";/**/
+	public static String INDIVIDUAL = "individual";/**/
+	public static String POPULATION = "population";/**/
+	public static String OFFSPRING = "offspring";/**/
+	public static String SUBDATA = "subdata";/**/
 	public static String VECSET = "vecset";
 	public static String SOLUTION = "solution";
 	public static String LOGS = "logs";
 	public static String LOGS_READABLE = "logs_readable";
-	public static String DATA = "data";
-	public static String TIMES = "times";
+	public static String DATA = "data";/**/
+	public static String TIMES = "times";/**/
 	public static String OTHERS = "write";
 
 	//Mistery Parameters

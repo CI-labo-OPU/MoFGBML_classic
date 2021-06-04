@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import emo.algorithms.Algorithm;
-import emo.algorithms.nsga2.Individual_nsga2;
 import fgbml.Pittsburgh;
 import fgbml.problem.FGBML;
 import fgbml.problem.OutputClass;
@@ -92,7 +91,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 
 		//Step 1.1. Initialize External Population
 		/** External Populatoin, which has non-dominated solutions found so far. */
-		Population<T> EP = new Population<>();
+//		Population<T> EP = new Population<>();
 
 		//Step 1.2. Initialize weight vectors & Calculate neighbor vectors.
 		functions = StaticMOEAD.initScalarizeFunctions(mop.getObjectiveNum(), mop.getTrain().getDataSize());
@@ -135,6 +134,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
+			individual.initAppendix(mop.getAppendixNum());
 			population.addIndividual(individual);
 		}
 		manager.setPopulation(population);
@@ -167,23 +167,25 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 
 		//Save Initial Population
 		timeWatcher.stop();
+		//Appendix Information
+		mop.setAppendix(manager.getPopulation());
 		output.savePopulationOrOffspring(manager, resultMaster, true);
 		timeWatcher.start();
 
 		//Step 1.5. EP Initialization
-		ArrayList<Individual_nsga2> nonDominated = StaticFunction.getNonDominatedSolution(population, mop.getOptimizer());
-		for(int i = 0; i < nonDominated.size(); i++) {
-			EP.addIndividual((T)nonDominated.get(i));
-		}
+//		ArrayList<Individual_nsga2> nonDominated = StaticFunction.getNonDominatedSolution(population, mop.getOptimizer());
+//		for(int i = 0; i < nonDominated.size(); i++) {
+//			EP.addIndividual((T)nonDominated.get(i));
+//		}
 
 		//Step 1.6. Finish the first genration.
 		System.out.print("0");
 		genCount++;
 		//Save EP
 		timeWatcher.stop();
-		detail = transformStrings(output, EP);
-		individualEP.add(detail[0]);
-		ruleSetEP.add(detail[1]);
+//		detail = transformStrings(output, EP);
+//		individualEP.add(detail[0]);
+//		ruleSetEP.add(detail[1]);
 		saveZ.add(transformZ(z));
 		timeWatcher.start();
 
@@ -229,7 +231,13 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 
 					//Step 2. Crossover
 						//GA type Selection (Michigan or Pittsburgh)
-					if(rnd.nextDouble() < (double)Consts.RULE_OPE_RT) {
+					double p;
+					if(StaticFunction.sameGeneInt(parents[0], parents[1])) {
+						p = 1.0;
+					} else {
+						p = Consts.RULE_OPE_RT;
+					}
+					if(rnd.nextDouble() < p) {
 						//Michigan Type Crossover (Child Generation)
 						child = (T)GAFunctions.michiganCrossover(mop, parents[0], rnd);
 					}
@@ -257,6 +265,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 				}
 				child.ruleset2michigan();
 				child.michigan2pittsburgh();
+				child.initAppendix(mop.getAppendixNum());
 
 				//Evaluate Child
 				evaWatcher.start();
@@ -275,7 +284,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 				}
 
 				//Step 2.5. Update of EP
-				StaticMOEAD.updateEP(EP, child, mop.getOptimizer());
+//				StaticMOEAD.updateEP(EP, child, mop.getOptimizer());
 
 				offspring.addIndividual(child);
 			}
@@ -293,12 +302,16 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 				}
 				manager.setPopulation(population);
 
+				//Appendix Information
+				mop.setAppendix(manager.getPopulation());
+				mop.setAppendix(manager.getOffspring());
+
 				//Save
 				output.savePopulationOrOffspring(manager, resultMaster, true);
 				output.savePopulationOrOffspring(manager, resultMaster, false);
-				detail = transformStrings(output, EP);
-				individualEP.add(detail[0]);
-				ruleSetEP.add(detail[1]);
+//				detail = transformStrings(output, EP);
+//				individualEP.add(detail[0]);
+//				ruleSetEP.add(detail[1]);
 				saveZ.add(transformZ(z));
 			}
 			timeWatcher.start();
@@ -308,12 +321,13 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 
 		timeWatcher.stop();
 		//Output method for EP.
-		outputEP(EPDir, individualEP, ruleSetEP);
+//		outputEP(EPDir, individualEP, ruleSetEP);
 		String fileName = resultMaster.getTrialRoot() + sep + "ideal.csv";
 		Output.writeln(fileName, saveZ);
 		timeWatcher.start();
 
-		return EP;
+//		return EP;
+		return null;
 	}
 
 	/**

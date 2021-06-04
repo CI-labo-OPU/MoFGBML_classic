@@ -34,7 +34,7 @@ public class MultiLabel_artificialExamine {
 
 		/* ********************************************************* */
 		int h = 500;
-		int dataSize = 3000;
+		int dataSize = 300;
 
 		double a = 0.2;
 		double b = 0.4;
@@ -48,6 +48,12 @@ public class MultiLabel_artificialExamine {
 
 		String name = "richromatic_a-" + a + "_b-" + b + "_r-" + r + "_dataSize-" + dataSize;
 
+
+		a = 0.2;
+		b = 0.4;
+		r = 0.5;
+		dataSize = 3000;
+		name = "wide_" + dataSize;
 		/* ********************************************************* */
 
 		MultiDataSetInfo[] datasets = makeDataset(name, h, dataSize, a, b, r);

@@ -115,6 +115,15 @@ public abstract class Rule {
 		this.fitness = 0.0;
 	}
 
+	public String getAntecedentString() {
+		String strs = "";
+		strs += String.valueOf(this.rule[0]);
+		for(int i = 1; i < this.rule.length; i++) {
+			strs += ", " + String.valueOf(this.rule[i]);
+		}
+		return strs;
+	}
+
 	public int getRuleLength() {
 		return this.ruleLength;
 	}

@@ -7,6 +7,7 @@ import emo.algorithms.moead.scalarization.AOF2;
 import emo.algorithms.moead.scalarization.PBI;
 import emo.algorithms.moead.scalarization.Tchebycheff;
 import emo.algorithms.moead.scalarization.WeightedSum;
+import fgbml.Pittsburgh;
 import ga.Individual;
 import ga.Population;
 import main.Consts;
@@ -29,9 +30,14 @@ public class StaticMOEAD {
 
 		//Exist Check
 		for(int p = 0; p < popSize; p++) {
-			if(StaticFunction.sameGeneInt(EP.getIndividual(p), individual)) {
+			String s1 = ((Pittsburgh)EP.getIndividual(p)).getRuleSet().getAntecedentSetString();
+			String s2 = ((Pittsburgh)individual).getRuleSet().getAntecedentSetString();
+			if(s1.equals(s2)) {
 				return;
 			}
+//			if(StaticFunction.sameGeneInt(EP.getIndividual(p), individual)) {
+//				return;
+//			}
 		}
 
 		for(int p = popSize - 1; 0 <= p; p--) {
@@ -49,8 +55,8 @@ public class StaticMOEAD {
 			}
 			else if(StaticFunction.isDominate(EP.getIndividual(p), individual, optimizer)) {
 				dominated = true;
+				break;
 			}
-
 		}
 
 		//Add individual to EP if no solutions in EP dominate individual.

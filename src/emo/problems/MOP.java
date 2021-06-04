@@ -1,6 +1,5 @@
 package emo.problems;
 
-import ga.Individual;
 import main.Consts;
 
 /**
@@ -12,8 +11,8 @@ import main.Consts;
 
 public abstract class MOP<T> {
 	// ************************************************************
-	protected int MIN = Consts.MINIMIZE;
-	protected int MAX = Consts.MAXIMIZE;
+	protected int MIN = Consts.MINIMIZE;	// for Optimizer
+	protected int MAX = Consts.MAXIMIZE;	// for Optimizer
 
 	protected int[] optimizer;
 

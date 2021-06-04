@@ -51,15 +51,7 @@ public class MoFGBML implements Experiment {
 
 		/* ********************************************************* */
 		//Initialize Fuzzy Sets
-		float[][] params = new float[][]
-				{
-					//3分割
-					new float[] {0f, 0f, 0.5f},
-					new float[] {0f, 0.5f, 1f},
-					new float[] {0.5f, 1f, 1f}
-				};
-		StaticFuzzyFunc.paramInit(Dtra.getNdim(), params);
-//		StaticFuzzyFunc.initFuzzy(Dtra);
+		StaticFuzzyFunc.initFuzzy(Dtra);
 
 		/* ********************************************************* */
 		//MOP No.

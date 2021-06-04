@@ -64,6 +64,22 @@ public class Subdivision implements Experiment {
 		//START:
 
 		/* ********************************************************* */
+		//MOP No.
+		int mopNo;
+		if(args.length < 7) {
+			mopNo = 1;	//MOP1
+		} else {
+			mopNo = Integer.parseInt(args[6]);
+		}
+
+		/* ********************************************************* */
+		//Sub rate
+		if(args.length < 8) {}
+		else {
+			Consts.SUBRATE = Double.parseDouble(args[7]);
+		}
+
+		/* ********************************************************* */
 		//Load Dataset
 		SingleDataSetInfo Dtra = new SingleDataSetInfo();
 		SingleDataSetInfo Dtst = new SingleDataSetInfo();
@@ -116,15 +132,6 @@ public class Subdivision implements Experiment {
 		/* ********************************************************* */
 		//Initialize Fuzzy Sets
 		StaticFuzzyFunc.initFuzzy(Dtra);
-
-		/* ********************************************************* */
-		//MOP No.
-		int mopNo;
-		if(args.length < 7) {
-			mopNo = 1;	//MOP1
-		} else {
-			mopNo = Integer.parseInt(args[6]);
-		}
 
 		/* ********************************************************* */
 		//Generate Problem
@@ -232,6 +239,9 @@ public class Subdivision implements Experiment {
 			break;
 		case 12:
 			mop = new SubMOP12(Dtra, Dtst, Dsubtra, Dvalid);
+			break;
+		case 13:
+			mop = new SubMOP13(Dtra, Dtst, Dsubtra, Dvalid);
 			break;
 		}
 

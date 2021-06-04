@@ -32,11 +32,51 @@ import fuzzy.fml.FuzzySet;
 import fuzzy.fml.params.HomoTriangle_2_3_4_5;
 import fuzzy.multi_label.MultiRule;
 import fuzzy.multi_label.MultiRuleSet;
-import fuzzy.multi_label.fuzzieee2020.Examine7;
 import ga.RealGene;
 import method.MersenneTwisterFast;
 import method.Output;
 import method.StaticFunction;
+
+abstract class ClassLabel<G>{
+	public abstract G get();
+	public abstract void set(G element);
+}
+
+class ConsequentClass extends ClassLabel<Integer>{
+	Integer classLabel;
+	public Integer get() {
+		return this.classLabel;
+	}
+
+	public void set(Integer element) {
+		this.classLabel = element;
+	}
+}
+
+class ConsequentClassVector extends ClassLabel<Integer[]>{
+	Integer[] classLabel;
+	public Integer[] get() {
+		return this.classLabel;
+	}
+
+	public void set(Integer[] element) {
+		this.classLabel = element;
+	}
+}
+
+class Consequent{
+	@SuppressWarnings("rawtypes")
+	ClassLabel classLabel;
+
+	@SuppressWarnings("rawtypes")
+	public ClassLabel getConsequentClass() {
+		return this.classLabel;
+	}
+	@SuppressWarnings("rawtypes")
+	public void setConsequentClass(ClassLabel element) {
+		this.classLabel = element;
+	}
+}
 
 public class Test2 {
 	public static void main(String[] args) {
@@ -94,7 +134,7 @@ public class Test2 {
 //		Examine5_MLC45_results.main(args);
 //		Examine6.main(args);
 
-		Examine7.main(args);
+//		Examine7.main(args);
 
 
 //		StaticFuzzyFunc.homogeneousInit(1);
@@ -102,6 +142,41 @@ public class Test2 {
 
 //		args = new String[] {"birds", "1", "1"};
 //		CILAB_Format.main(args);
+
+//		arrayRemove(args);
+
+//		variableArgument(new int[] {1, 2});
+
+		testGetGenerics(args);
+	}
+
+	public static void testGetGenerics(String[] args) {
+		ConsequentClassVector C = new ConsequentClassVector();
+		C.set(new Integer[]{1, 2});
+		Consequent con = new Consequent();
+		con.setConsequentClass(C);
+		ConsequentClassVector answer = (ConsequentClassVector)con.getConsequentClass();
+		Integer[] c = answer.get();
+		System.out.println(c);
+	}
+
+	public static void variableArgument(int... x) {
+		System.out.println(x);
+	}
+
+	public static void arrayRemove(String[] args) {
+		String[] a = {"1", "2", "3"};
+		for(String str : a) {
+			System.out.println(str);
+		}
+		System.out.println();
+		ArrayList<String> tmp = new ArrayList<>(Arrays.asList(a));
+		tmp.remove(0);
+		String[] newArgs = tmp.toArray(new String[0]);
+		for(String str : newArgs) {
+			System.out.println(str);
+		}
+
 	}
 
 	public static void loadPropertyTest(String[] args) {

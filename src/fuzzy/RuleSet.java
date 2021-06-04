@@ -173,6 +173,15 @@ public abstract class RuleSet<T extends Rule> {
 		}
 	}
 
+	public String getAntecedentSetString() {
+		String ln = System.lineSeparator();
+		String strs = "";
+		for(int i = 0; i < this.micRules.size(); i++) {
+			strs += this.micRules.get(i).getAntecedentString() + ln;
+		}
+		return strs;
+	}
+
 	public int getRuleNum() {
 		return this.ruleNum;
 	}

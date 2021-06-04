@@ -147,7 +147,14 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 
 					//Step 2. Crossover
 						//GA type Selection (Michigan or Pittsburgh)
-					if(rnd.nextDouble() < (double)Consts.RULE_OPE_RT) {
+					double p;
+					if(StaticFunction.sameGeneInt(parent[0], parent[1])) {
+						p = 1.0;
+					} else {
+						p = Consts.RULE_OPE_RT;
+					}
+
+					if(rnd.nextDouble() < p) {
 						//Michigan Type Crossover (Child Generation)
 						child = (T)GAFunctions.michiganCrossover(mop, (Pittsburgh)parent[0], rnd);
 					} else {

@@ -161,13 +161,13 @@ public class MultiLabel implements Experiment {
 			mop =  new MOP_ExactMatchError(Dtra, Dtst);
 			break;
 		case 2:
-			mop = new MOP_Fmeasure(Dtra, Dtst);
-			break;
-		case 3:
 			mop = new MOP_HammingLoss(Dtra, Dtst);
 			break;
+		case 3:
+			mop = new MOP_Fmeasure(Dtra, Dtst);
+			break;
 		case 4:
-			mop = new MOP_Multi3obj(Dtra, Dtst);
+			mop = new MOP_weighted4obj(Dtra, Dtst);
 			break;
 		case 5:
 			mop = new MOP_Multi4obj(Dtra, Dtst);
@@ -176,7 +176,6 @@ public class MultiLabel implements Experiment {
 		return mop;
 	}
 }
-
 
 
 

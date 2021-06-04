@@ -28,6 +28,7 @@ import fgbml.multilabel.MOP_Fmeasure;
 import fgbml.multilabel.MultiPittsburgh;
 import fuzzy.FuzzyPartitioning;
 import fuzzy.SingleRule;
+import fuzzy.SingleRuleSet;
 import fuzzy.StaticFuzzyFunc;
 import fuzzy.fml.FuzzySet;
 import fuzzy.fml.KB;
@@ -50,7 +51,7 @@ public class test {
 	static int now = 0;
 
 	public static void main(String[] args) {
-		loadPropertyTest(args);
+//		loadPropertyTest(args);
 
 //		calcMembershipTest(args);
 //		checkShapeMembershipTest(args);
@@ -121,8 +122,47 @@ public class test {
 
 //		checkManyRule(args);
 
+		checkRadixSortForRule(args);
 	}
 
+	public static void checkRadixSortForRule(String[] args) {
+		int[] a1 = new int[] {1, 2, 3};
+		int[] a2 = new int[] {4, 5, 6};
+		int[] a3 = new int[] {7, 8, 9};
+
+		SingleRule rule1 = new SingleRule(a1);
+		SingleRule rule2 = new SingleRule(a2);
+		SingleRule rule3 = new SingleRule(a3);
+
+		SingleRuleSet ruleSet1 = new SingleRuleSet();
+		SingleRuleSet ruleSet2 = new SingleRuleSet();
+
+		ruleSet1.addRule(rule1);
+		ruleSet1.addRule(rule2);
+		ruleSet1.addRule(rule3);;
+
+		ruleSet2.addRule(rule3);
+		ruleSet2.addRule(rule1);
+		ruleSet2.addRule(rule2);
+
+		String s1 = ruleSet1.getAntecedentSetString();
+		String s2 = ruleSet2.getAntecedentSetString();
+
+		System.out.println(s1.equals(s2));
+
+		ruleSet1.radixSort();
+		ruleSet2.radixSort();
+
+		s1 = ruleSet1.getAntecedentSetString();
+		s2 = ruleSet2.getAntecedentSetString();
+
+		System.out.println(s1.equals(s2));
+
+
+		System.out.println();
+
+
+	}
 
 	public static void checkManyRule(String[] args) {
 		ForkJoinPool forkJoinPool = new ForkJoinPool(3);

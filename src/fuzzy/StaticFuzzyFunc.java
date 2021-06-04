@@ -269,6 +269,7 @@ public class StaticFuzzyFunc {
 		double ans = 0.0;
 		int Cnum = trust.length;
 
+		// 信頼度が0.5以下かどうかの判定はCF計算の後で判定（=別メソッド化）
 		if(conCla == -1 || trust[conCla] <= 0.5) {
 			ans = 0;
 		}

@@ -3,6 +3,7 @@ package method;
 import java.io.File;
 import java.util.ArrayList;
 
+import fgbml.multitask.TaskManager;
 import main.Consts;
 import main.Setting;
 
@@ -27,6 +28,13 @@ public class ResultMaster {
 	public ArrayList<String> offspring = new ArrayList<String>();
 	public ArrayList<String> ruleSetPopulation = new ArrayList<String>();
 	public ArrayList<String> ruleSetOffspring = new ArrayList<String>();
+
+	public ArrayList<String> bestIndividual = new ArrayList<>();
+	public ArrayList<String> bestRuleSet = new ArrayList<>();
+
+	//MultiTask用
+	public ArrayList<TaskManager> worlds = new ArrayList<>();
+
 
 	// ************************************************************
 	public ResultMaster() {}
@@ -83,6 +91,10 @@ public class ResultMaster {
 
 	}
 
+	public void addTaskManager(TaskManager world) {
+		this.worlds.add(world);
+	}
+
 	public void addTraAve(double tra) {
 		this.traAve.add(tra);
 	}
@@ -123,6 +135,14 @@ public class ResultMaster {
 		this.ruleSetOffspring.add(str);
 	}
 
+	public void addBestIndividual(String str) {
+		this.bestIndividual.add(str);
+	}
+
+	public void addBestRuleSet(String str) {
+		this.bestRuleSet.add(str);
+	}
+
 	public void setRootDir(String rootDir) {
 		this.rootDir = rootDir;
 	}
@@ -161,6 +181,10 @@ public class ResultMaster {
 
 	public String getTrialRoot() {
 		return this.trialRoot;
+	}
+
+	public ArrayList<TaskManager> getWorlds() {
+		return worlds;
 	}
 
 }

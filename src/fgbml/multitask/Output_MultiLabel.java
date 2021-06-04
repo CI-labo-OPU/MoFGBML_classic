@@ -1,4 +1,4 @@
-package fgbml.multilabel;
+package fgbml.multitask;
 
 import fgbml.problem.OutputClass;
 import ga.Population;

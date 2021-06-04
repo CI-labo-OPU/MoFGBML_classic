@@ -31,7 +31,7 @@ public class Setting {
 	public static ForkJoinPool forkJoinPool = null;
 
 	/** Using Main Experiment */
-	public static String experimentName = "Subdivision";
+	public static String experimentName = "MultiTask";
 
 	public static int calclationType = 0;	//0:Single node, 1:Apache Spark, 2:Simple Socket
 
@@ -50,15 +50,15 @@ public class Setting {
 	/** Termination Criteria (true: generation, false: evaluation) */
 	public static boolean terminationCriteria = true;
 	/** #of Generation */
-	public static int generationNum = 1000;
+	public static int generationNum = 5000;
 	/** #of Evaluation */
 	public static int evaluationNum = 50000;
 	/** Timing of output Population (generation based) */
-	public static int timingOutput = 50;
+	public static int timingOutput = 1000;
 	/** #of Population */
-	public static int populationSize = 50;
+	public static int populationSize = 200;
 	/** #of Offspring */
-	public static int offspringSize = 50;
+	public static int offspringSize = 200;
 	@Deprecated
 	//TODO MOPクラスで指定
 	public static int objectiveNum = 2;	// #of Objective
@@ -69,7 +69,7 @@ public class Setting {
 	/** Time of repeat CV */
 	public static int repeatTimes = 3;
 	/** Random seed */
-	public static int seed = 2019;
+	public static int seed = 2020;
 	/** Dataset preDivide Number */
 	public static int preDivNum = 1;
 	/** (true:Stop by each trial) */
