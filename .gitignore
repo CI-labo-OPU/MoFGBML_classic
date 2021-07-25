@@ -1,1 +1,8 @@
 /bin/
+/bat/
+/\$archive_copy/
+/\$archive_output/
+/gitignore/
+/result/
+/zips/
+/dataset/
