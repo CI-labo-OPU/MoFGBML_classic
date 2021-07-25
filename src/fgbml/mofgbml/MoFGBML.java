@@ -119,11 +119,11 @@ public class MoFGBML implements Experiment {
 		((Output_MoFGBML)output).outputFAN2021(trialRoot, resultMaster);
 
 		//Output One Trial Information
-		resultMaster.outputIndividual(populationDir, offspringDir);
-		resultMaster.population.clear();
-		resultMaster.ruleSetPopulation.clear();
-		resultMaster.offspring.clear();
-		resultMaster.ruleSetOffspring.clear();
+//		resultMaster.outputIndividual(populationDir, offspringDir);
+//		resultMaster.population.clear();
+//		resultMaster.ruleSetPopulation.clear();
+//		resultMaster.offspring.clear();
+//		resultMaster.ruleSetOffspring.clear();
 
 		System.out.println();
 	}

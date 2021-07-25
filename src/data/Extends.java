@@ -1,6 +1,9 @@
 package data;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -8,8 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import method.Output;
 
 public class Extends {
 
@@ -84,11 +85,42 @@ public class Extends {
 		System.out.println();
 
 		String outputName = args[1];
-		Output.writeln(outputName, outputLines);
+		writeln(outputName, outputLines);
 
 		System.out.println("END");
 
 
+	}
+
+	/**
+	 * ArrayList用
+	 * @param fileName
+	 * @param strs : ArrayList{@literal <String>}
+	 */
+	public static void writeln(String fileName, ArrayList<String> strs) {
+		String[] array = (String[]) strs.toArray(new String[0]);
+		writeln(fileName, array);
+	}
+
+	/**
+	 * 配列用
+	 * @param fileName
+	 * @param array : String[]
+	 */
+	public static void writeln(String fileName, String[] array){
+
+		try {
+//			FileWriter fw = new FileWriter(fileName, true);
+			FileWriter fw = new FileWriter(fileName, false);
+			PrintWriter pw = new PrintWriter( new BufferedWriter(fw) );
+			for(int i=0; i<array.length; i++){
+				 pw.println(array[i]);
+			}
+			pw.close();
+	    }
+		catch (IOException ex){
+			ex.printStackTrace();
+	    }
 	}
 
 }
