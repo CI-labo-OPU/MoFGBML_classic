@@ -3,6 +3,7 @@ package method;
 import java.io.File;
 import java.util.ArrayList;
 
+import fgbml.Results;
 import fgbml.multitask.TaskManager;
 import main.Consts;
 import main.Setting;
@@ -32,8 +33,16 @@ public class ResultMaster {
 	public ArrayList<String> bestIndividual = new ArrayList<>();
 	public ArrayList<String> bestRuleSet = new ArrayList<>();
 
+	public ArrayList<Results> results = new ArrayList<>();
+
 	//MultiTask用
 	public ArrayList<TaskManager> worlds = new ArrayList<>();
+
+	//FAN2021用
+	public int sameParentCount = 0;
+	public int[] offspringNumWithRuleNum = new int[Consts.MAX_RULE_NUM];
+	public ArrayList<Integer> truePopSize = new ArrayList<>();
+	public ArrayList<Integer> updatedNum = new ArrayList<>();
 
 
 	// ************************************************************
@@ -185,6 +194,62 @@ public class ResultMaster {
 
 	public ArrayList<TaskManager> getWorlds() {
 		return worlds;
+	}
+
+	public void addResults(Results result) {
+		this.results.add(result);
+	}
+
+	public ArrayList<Results> getResults() {
+		return this.results;
+	}
+
+	public Results getResults(int i) {
+		return this.results.get(i);
+	}
+
+	public void clearSameParentCount() {
+		this.sameParentCount = 0;
+	}
+
+	public int getSameParentCount() {
+		return this.sameParentCount;
+	}
+
+	public void addSameParentCount(int count) {
+		this.sameParentCount += count;
+	}
+
+	public void incrementSameParentCount() {
+		this.sameParentCount++;
+	}
+
+	public int[] getOffspringNumWithRuleNum() {
+		return this.offspringNumWithRuleNum;
+	}
+
+	public void incrementOffspringNumWithRuleNum(int ruleNum) {
+		this.offspringNumWithRuleNum[ruleNum-1]++;
+	}
+
+	public void clearOffspringNumWithRuleNum() {
+		this.offspringNumWithRuleNum = new int[Consts.MAX_RULE_NUM];
+	}
+
+	public void addTruePopSize(int truePopSize) {
+		this.truePopSize.add(truePopSize);
+	}
+
+	public ArrayList<Integer> getTruePopSize() {
+		return this.truePopSize;
+	}
+
+	public void addUpdatedNum(int updatedNum) {
+		this.updatedNum.add(updatedNum);
+	}
+
+	public ArrayList<Integer> getUpdatedNum() {
+		return this.updatedNum;
 	}
 
 }

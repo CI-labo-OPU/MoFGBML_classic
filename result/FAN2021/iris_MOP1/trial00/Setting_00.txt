@@ -1,0 +1,34 @@
+Class: main.Setting
+Settings: 
+osType = 0
+forkJoinPool = java.util.concurrent.ForkJoinPool@511d50c0[Running, parallelism = 1, size = 0, active = 0, running = 0, steals = 0, tasks = 0, submissions = 0]
+experimentName = MoFGBML
+calclationType = 0
+useArgs = true
+dataName = iris
+saveDir = FAN2021
+parallelCores = 1
+terminationCriteria = true
+generationNum = 100
+evaluationNum = 1000000
+timingOutput = 1
+populationSize = 60
+offspringSize = 60
+objectiveNum = 2
+emoType = 5
+crossValidationNum = 10
+repeatTimes = 3
+seed = 2020
+preDivNum = 1
+isOnceExe = true
+islandNum = 3
+migrationItv = 100
+rotationItv = 100
+isDistributed = false
+dirLocation = location
+serverNum = 1
+portNum = 50000
+threadNum = 1
+nodeNames = [aaa]
+serverList = [Ljava.net.InetSocketAddress;@60e53b93
+

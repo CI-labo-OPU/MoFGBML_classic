@@ -7,6 +7,7 @@ import java.util.concurrent.ForkJoinPool;
 
 import emo.algorithms.Algorithm;
 import fgbml.Pittsburgh;
+import fgbml.mofgbml.FAN2021;
 import fgbml.problem.FGBML;
 import fgbml.problem.OutputClass;
 import ga.GAFunctions;
@@ -139,6 +140,8 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 			for(int q = 0; q < Setting.offspringSize; q++) {
 				T child = null;
 
+				boolean sameParentFlag = false;	//同じ親から作られた子個体かどうか判定
+
 				while(true) {
 					//Step 1. Mating Selection
 					int tournamentSize = 2;
@@ -150,8 +153,10 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 					double p;
 					if(StaticFunction.sameGeneInt(parent[0], parent[1])) {
 						p = 1.0;
+						sameParentFlag = true;	//同じ親が選ばれた
 					} else {
 						p = Consts.RULE_OPE_RT;
+						sameParentFlag = false;	//同じ親ではなかった
 					}
 
 					if(rnd.nextDouble() < p) {
@@ -184,10 +189,19 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 					}
 				}
 
+				// 同じ親が選択された場合
+				if(sameParentFlag) {
+					resultMaster.incrementSameParentCount();
+				}
+
+
 				child.ruleset2michigan();
 				child.michigan2pittsburgh();
 				child.initAppendix(mop.getAppendixNum());
 				offspring.addIndividual(child);
+
+				// 生成された子個体のルール数ごとに個体数をカウントする（FAN2021）
+				resultMaster.incrementOffspringNumWithRuleNum(child.getRuleNum());
 
 			}
 			manager.setOffspring(offspring);
@@ -207,6 +221,10 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 			/* ********************************************************* */
 			//Save current Population & new Offspring
 			timeWatcher.stop();
+			// FAN2021用のチェック
+			int[] fan2021 = FAN2021.checkFAN2021(manager);
+			resultMaster.addTruePopSize(fan2021[0]);
+			resultMaster.addUpdatedNum(fan2021[1]);
 			if(genCount % Setting.timingOutput == 0) {
 				//Appendix Information
 				//Population

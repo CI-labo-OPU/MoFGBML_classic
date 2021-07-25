@@ -75,6 +75,11 @@ public class MoFGBML implements Experiment {
 		OutputClass<SinglePittsburgh> output = new Output_MoFGBML();
 
 		/* ********************************************************* */
+		//Initialize for FAN2021
+		resultMaster.clearSameParentCount();
+		resultMaster.clearOffspringNumWithRuleNum();
+
+		/* ********************************************************* */
 		//Generate Individual Instance
 		SinglePittsburgh instance = new SinglePittsburgh();
 
@@ -109,6 +114,9 @@ public class MoFGBML implements Experiment {
 		timeWatcher.stop();
 		resultMaster.addTimes( timeWatcher.getSec() );
 		resultMaster.addEvaTimes( evaWatcher.getSec() );
+
+		//Output Information for FAN2021(2021.09.13-15)
+		((Output_MoFGBML)output).outputFAN2021(trialRoot, resultMaster);
 
 		//Output One Trial Information
 		resultMaster.outputIndividual(populationDir, offspringDir);

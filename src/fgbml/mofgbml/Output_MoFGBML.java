@@ -1,8 +1,13 @@
 package fgbml.mofgbml;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import fgbml.SinglePittsburgh;
 import fgbml.problem.OutputClass;
 import ga.Population;
+import method.Output;
+import method.ResultMaster;
 
 public class Output_MoFGBML extends OutputClass<SinglePittsburgh> {
 
@@ -115,6 +120,76 @@ public class Output_MoFGBML extends OutputClass<SinglePittsburgh> {
 
 		return strs;
 	}
+
+	public void outputFAN2021(String trialRoot, ResultMaster resultMaster) {
+		String sep = File.separator;
+		ArrayList<String> strs = new ArrayList<>();
+		String str;
+		String fileName;
+
+		int sameParentCount = resultMaster.getSameParentCount();
+		int[] offspringNumWithRuleNum = resultMaster.getOffspringNumWithRuleNum();
+		ArrayList<Integer> truePopSize = resultMaster.getTruePopSize();
+		ArrayList<Integer> updatedNum = resultMaster.getUpdatedNum();
+
+		//sameParentCount
+		fileName = trialRoot + sep + "FAN_sameParentCount_"+sameParentCount+".txt";
+		str = String.valueOf(sameParentCount);
+		strs.add(str);
+		Output.writeln(fileName, strs);
+
+		// offspringNumWithRuleNum
+		strs = new ArrayList<>();
+		str = "";
+		fileName = trialRoot + sep + "FAN_offspringNumWithRuleNum.csv";
+		//header
+		str = "ruleNum,count";
+		strs.add(str);
+		//body
+		for(int i = 0; i < offspringNumWithRuleNum.length; i++) {
+			str = String.valueOf(i+1);
+			str += "," + String.valueOf(offspringNumWithRuleNum[i]);
+			strs.add(str);
+		}
+		Output.writeln(fileName, strs);
+
+		//truePopSize
+		strs = new ArrayList<>();
+		str = "";
+		fileName = trialRoot + sep + "FAN_truePopSize.csv";
+		//header
+		str = "generation,truePopSize";
+		strs.add(str);
+		//body
+		for(int i = 0; i < truePopSize.size(); i++) {
+			str = String.valueOf(i+1);
+			str += "," + String.valueOf(truePopSize.get(i));
+			strs.add(str);
+		}
+		Output.writeln(fileName, strs);
+
+		//updatedNum
+		strs = new ArrayList<>();
+		str = "";
+		fileName = trialRoot + sep + "FAN_updatedNum.csv";
+		//header
+		str = "generation,updatedNum";
+		strs.add(str);
+		//body
+		for(int i = 0; i < updatedNum.size(); i++) {
+			str = String.valueOf(i+1);
+			str += "," + String.valueOf(updatedNum.get(i));
+			strs.add(str);
+		}
+		Output.writeln(fileName, strs);
+	}
+
+
+
+
+
+
+
 
 
 }
