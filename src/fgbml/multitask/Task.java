@@ -109,12 +109,17 @@ public class Task {
 				int parentSize = 2;
 				Individual_nsga2[] parent = NSGA2.tournamentSelection(manager.getPopulation(), parentSize, tournamentSize, rnd);
 
+				//TODO ピッツバーグとミシガンの選ばれた回数カウント
+
 				//Step 2. Crossover
 					//GA type Selection (Michigan or Pittsburgh)
 				if(rnd.nextDouble() < (double)Consts.RULE_OPE_RT) {
 					//Michigan Type Crossover (Child Generation)
 					child = (MultiPittsburgh)GAFunctions.michiganCrossover(mop, (Pittsburgh)parent[0], rnd);
 				} else {
+					//TODO 同じ親個体（決定変数が等しい）の場合、強制でミシガン操作
+					//TODO 同じ親個体が選ばれた回数カウント
+
 					//Pittsburgh Type Crossover (Child Generation)
 					Pittsburgh[] cast = new Pittsburgh[parentSize];
 					for(int i = 0; i < parentSize; i++) {
@@ -161,7 +166,6 @@ public class Task {
 		this.mop.evaluate(individual);
 	}
 
-	//TODO
 	@SuppressWarnings("unchecked")
 	public Population<MultiPittsburgh> makeMatingPool(TaskManager world, MersenneTwisterFast rnd) {
 		Population<MultiPittsburgh> matingPool = new Population<>();
@@ -187,7 +191,6 @@ public class Task {
 			if(i == this.taskID) {
 				continue;
 			}
-			//TODO
 			Task task = world.getTask(i);
 			Population<MultiPittsburgh> pop = task.getPopulation();
 			//他タスクの個体群を複雑順にソート

@@ -96,15 +96,6 @@ public class MultiTask implements Experiment {
 		TimeWatcher evaWatcher = new TimeWatcher();		//Evaluating time
 		timeWatcher.start();
 
-		/*
-		 * To 田中君
-		 * 下のコードは、移住操作とかは何もしていないコードになっています。
-		 * つまり、タスク1～タスク3をそれぞれ独立に実行するコードの一例です。
-		 * ここを全部消して、マルチタスク用に実装してほしいです。
-		 * Task.javaクラスにマルチタスク用の子個体生成メソッド（makeOffspring()）とか、
-		 * 移住用メソッド（migration()）とか用意してみたんやけど、
-		 * もちろんそれらを使わずに実装してくれて全然OKです！
-		 */
 		/* ********************************************************* */
 		/* ********************************************************* */
 		//MultiTask Start
@@ -199,6 +190,7 @@ public class MultiTask implements Experiment {
 			else {
 				/* 情報交換する */
 
+				//TODO 個体群プール廃止→移住個体を先に決定しておく
 				//1. 親個体群プール生成
 				ArrayList<Population<MultiPittsburgh>> listPools = new ArrayList<>();
 				for(int i = 0; i < world.getTaskNum(); i++) {
@@ -222,7 +214,6 @@ public class MultiTask implements Experiment {
 				}
 
 				//4. 環境選択
-				//TODO
 				for(int i = 0; i < world.getTaskNum(); i++) {
 					Task task = world.getTask(i);
 					task.environmentalSelection();

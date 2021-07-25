@@ -31,7 +31,7 @@ public class Setting {
 	public static ForkJoinPool forkJoinPool = null;
 
 	/** Using Main Experiment */
-	public static String experimentName = "MultiTask";
+	public static String experimentName = "MoFGBML";
 
 	public static int calclationType = 0;	//0:Single node, 1:Apache Spark, 2:Simple Socket
 
@@ -50,15 +50,15 @@ public class Setting {
 	/** Termination Criteria (true: generation, false: evaluation) */
 	public static boolean terminationCriteria = true;
 	/** #of Generation */
-	public static int generationNum = 5000;
+	public static int generationNum = 10000;
 	/** #of Evaluation */
-	public static int evaluationNum = 50000;
+	public static int evaluationNum = 1000000;
 	/** Timing of output Population (generation based) */
-	public static int timingOutput = 1000;
+	public static int timingOutput = 1;
 	/** #of Population */
-	public static int populationSize = 200;
+	public static int populationSize = 100;
 	/** #of Offspring */
-	public static int offspringSize = 200;
+	public static int offspringSize = 100;
 	@Deprecated
 	//TODO MOPクラスで指定
 	public static int objectiveNum = 2;	// #of Objective

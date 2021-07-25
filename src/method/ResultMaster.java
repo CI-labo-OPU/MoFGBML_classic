@@ -76,8 +76,8 @@ public class ResultMaster {
 			int genCount = i * Setting.timingOutput;
 			fileName = populationDir + sep + Consts.INDIVIDUAL + sep + "gen" + genCount + ".csv";
 			Output.writeln(fileName, population.get(i));
-			fileName = populationDir + sep + Consts.RULESET + sep + "gen" + genCount + ".txt";
-			Output.writeln(fileName, ruleSetPopulation.get(i));
+//			fileName = populationDir + sep + Consts.RULESET + sep + "gen" + genCount + ".txt";
+//			Output.writeln(fileName, ruleSetPopulation.get(i));
 		}
 
 		//Offspring
@@ -85,8 +85,8 @@ public class ResultMaster {
 			int genCount = (i+1) * Setting.timingOutput;
 			fileName = offspringDir + sep + Consts.INDIVIDUAL + sep + "gen" + genCount + ".csv";
 			Output.writeln(fileName, offspring.get(i));
-			fileName = offspringDir + sep + Consts.RULESET + sep + "gen" + genCount + ".txt";
-			Output.writeln(fileName, ruleSetOffspring.get(i));
+//			fileName = offspringDir + sep + Consts.RULESET + sep + "gen" + genCount + ".txt";
+//			Output.writeln(fileName, ruleSetOffspring.get(i));
 		}
 
 	}
