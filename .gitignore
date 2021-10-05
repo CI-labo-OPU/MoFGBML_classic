@@ -3,7 +3,7 @@
 /\$archive_copy/
 /\$archive_output/
 /gitignore/
-/result/
+/result/*
 /zips/
 /dataset/
 /\.git_old/
