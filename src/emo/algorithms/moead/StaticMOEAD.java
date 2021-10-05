@@ -101,7 +101,7 @@ public class StaticMOEAD {
 	 * @return ScalarizeFunction[] : weight vectors with Setting.emoType
 	 */
 	@SuppressWarnings("rawtypes")
-	public static ScalarizeFunction[] initScalarizeFunctions(int objectiveNum, int dataSize) {
+	public static ScalarizeFunction[] initScalarizeFunctions(int objectiveNum, int dataSize, int Cnum) {
 		ScalarizeFunction[] functions = null;
 
 		if(Setting.emoType == Consts.WS) {
@@ -138,7 +138,7 @@ public class StaticMOEAD {
 			int populationSize = Setting.populationSize;
 			functions = new ScalarizeFunction[populationSize];
 			for(int i = 0; i < populationSize; i++) {
-				functions[i] = new AOF(i, dataSize);
+				functions[i] = new AOF(i, dataSize, Cnum);
 
 				//This vector is defined to calculate the neighbor vectors.
 				double[] vector = new double[] {1.0, functions[i].z[1]};	//(1, #of rules)

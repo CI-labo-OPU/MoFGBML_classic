@@ -95,7 +95,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 //		Population<T> EP = new Population<>();
 
 		//Step 1.2. Initialize weight vectors & Calculate neighbor vectors.
-		functions = StaticMOEAD.initScalarizeFunctions(mop.getObjectiveNum(), mop.getTrain().getDataSize());
+		functions = StaticMOEAD.initScalarizeFunctions(mop.getObjectiveNum(), mop.getTrain().getDataSize(), mop.getTrain().getCnum());
 		for(int vec = 0; vec < functions.length; vec++) {
 			functions[vec].calcMatingNeighbors(functions);
 			functions[vec].calcUpdateNeighbors(functions);
@@ -133,6 +133,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 				}
 			}
 
+			individual.setGeneration(0);
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
 			individual.initAppendix(mop.getAppendixNum());
@@ -169,6 +170,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 		//Save Initial Population
 		timeWatcher.stop();
 		//Appendix Information
+		resultMaster.addGenCounts(String.valueOf(genCount));
 		mop.setAppendix(manager.getPopulation());
 		output.savePopulationOrOffspring(manager, resultMaster, true);
 		timeWatcher.start();
@@ -180,8 +182,8 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 //		}
 
 		//Step 1.6. Finish the first genration.
-		System.out.print("0");
-		genCount++;
+//		System.out.print("0");
+//		genCount++;
 		//Save EP
 		timeWatcher.stop();
 //		detail = transformStrings(output, EP);
@@ -192,7 +194,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 
 		/* ********************************************************* */
 		//Step 2. Update (GA Searching Frame)
-		int detailCount = 1;
+		int detailCount = 0;
 		while(true) {
 			/* ********************************************************* */
 			//Output "Period" per const interval.
@@ -275,6 +277,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 					resultMaster.incrementSameParentCount();
 				}
 
+				child.setGeneration(genCount+1);
 				child.ruleset2michigan();
 				child.michigan2pittsburgh();
 				child.initAppendix(mop.getAppendixNum());
@@ -322,6 +325,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 			if(genCount % Setting.timingOutput == 0) {
 
 				//Appendix Information
+				resultMaster.addGenCounts(String.valueOf(genCount));
 				mop.setAppendix(manager.getPopulation());
 				mop.setAppendix(manager.getOffspring());
 
@@ -340,7 +344,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 
 		timeWatcher.stop();
 		//Output method for EP.
-//		outputEP(EPDir, individualEP, ruleSetEP);
+//		outputEP(EPDir, resultMaster.getGenCounts(), individualEP, ruleSetEP);
 		String fileName = resultMaster.getTrialRoot() + sep + "ideal.csv";
 		Output.writeln(fileName, saveZ);
 		timeWatcher.start();
@@ -355,12 +359,13 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 	 * @param individual
 	 * @param ruleSet
 	 */
-	public void outputEP(String dir, ArrayList<String> individual, ArrayList<String> ruleSet) {
+	public void outputEP(String dir, ArrayList<String> genCounts, ArrayList<String> individual, ArrayList<String> ruleSet) {
 		String sep = File.separator;
 		String fileName;
 
 		for(int i = 0; i < individual.size(); i++) {
-			int genCount = i * Setting.timingOutput;
+			String genCount = genCounts.get(i);
+//			int genCount = i * Setting.timingOutput;
 			fileName = dir + sep + Consts.INDIVIDUAL + sep + "gen" + genCount + ".csv";
 			Output.writeln(fileName, individual.get(i));
 			fileName = dir + sep + Consts.RULESET + sep + "gen" + genCount + ".csv";

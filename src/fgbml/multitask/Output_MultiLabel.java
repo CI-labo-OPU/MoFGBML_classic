@@ -5,17 +5,12 @@ import ga.Population;
 
 public class Output_MultiLabel extends OutputClass<MultiPittsburgh>{
 
-	@Override
-	public String outputPittsburgh(Population<MultiPittsburgh> population) {
+	public String pittsburghHeader(int objectiveNum) {
 		String ln = System.lineSeparator();
-		String strs = "";
 		String str = "";
 
-		int popSize = population.getIndividuals().size();
-		int objectiveNum = population.getIndividual(0).getObjectiveNum();
-
-		//Header
-		str = "id";
+		str += "generation";
+		str += "," + "pop_id";
 		for(int o = 0; o < objectiveNum; o++) {
 			str += "," + "f" + String.valueOf(o);
 		}
@@ -38,12 +33,29 @@ public class Output_MultiLabel extends OutputClass<MultiPittsburgh>{
 
 		str += "," + "ruleNum";
 		str += "," + "ruleLength";
-		strs += str + ln;
+
+		str += ln;
+
+		return str;
+	}
+
+	@Override
+	public String outputPittsburgh(Population<MultiPittsburgh> population) {
+		String ln = System.lineSeparator();
+		String strs = "";
+		String str = "";
+
+		int popSize = population.getIndividuals().size();
+		int objectiveNum = population.getIndividual(0).getObjectiveNum();
 
 		//Population
 		for(int p = 0; p < popSize; p++) {
+			str = "";
+
+			//generation
+			str += String.valueOf(population.getIndividual(p).getGeneration());
 			//id
-			str = String.valueOf(p);
+			str += "," + String.valueOf(p);
 			//fitness
 			for(int o = 0; o < objectiveNum; o++) {
 				str += "," + population.getIndividual(p).getFitness(o);

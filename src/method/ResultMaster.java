@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import fgbml.Results;
 import fgbml.multitask.TaskManager;
 import main.Consts;
-import main.Setting;
 
 public class ResultMaster {
 	// ************************************************************
@@ -34,6 +33,8 @@ public class ResultMaster {
 	public ArrayList<String> bestRuleSet = new ArrayList<>();
 
 	public ArrayList<Results> results = new ArrayList<>();
+
+	public ArrayList<String> genCounts = new ArrayList<>();
 
 	//MultiTask用
 	public ArrayList<TaskManager> worlds = new ArrayList<>();
@@ -82,7 +83,8 @@ public class ResultMaster {
 
 		//Population
 		for(int i = 0; i < population.size(); i++) {
-			int genCount = i * Setting.timingOutput;
+//			int genCount = i * Setting.timingOutput;
+			String genCount = genCounts.get(i);
 			fileName = populationDir + sep + Consts.INDIVIDUAL + sep + "gen" + genCount + ".csv";
 			Output.writeln(fileName, population.get(i));
 //			fileName = populationDir + sep + Consts.RULESET + sep + "gen" + genCount + ".txt";
@@ -91,7 +93,8 @@ public class ResultMaster {
 
 		//Offspring
 		for(int i = 0; i < offspring.size(); i++) {
-			int genCount = (i+1) * Setting.timingOutput;
+//			int genCount = (i+1) * Setting.timingOutput;
+			String genCount = genCounts.get(i+1);
 			fileName = offspringDir + sep + Consts.INDIVIDUAL + sep + "gen" + genCount + ".csv";
 			Output.writeln(fileName, offspring.get(i));
 //			fileName = offspringDir + sep + Consts.RULESET + sep + "gen" + genCount + ".txt";
@@ -152,6 +155,10 @@ public class ResultMaster {
 		this.bestRuleSet.add(str);
 	}
 
+	public void addGenCounts(String str) {
+		this.genCounts.add(str);
+	}
+
 	public void setRootDir(String rootDir) {
 		this.rootDir = rootDir;
 	}
@@ -202,6 +209,10 @@ public class ResultMaster {
 
 	public ArrayList<Results> getResults() {
 		return this.results;
+	}
+
+	public ArrayList<String> getGenCounts(){
+		return this.genCounts;
 	}
 
 	public Results getResults(int i) {

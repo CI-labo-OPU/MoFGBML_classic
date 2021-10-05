@@ -68,6 +68,7 @@ public class Task {
 				}
 			}
 
+			individual.setGeneration(0);
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
 			individual.initAppendix(mop.getAppendixNum());
@@ -96,10 +97,12 @@ public class Task {
 		}
 	}
 
-	public Population normalMakeOffspring(MersenneTwisterFast rnd) {
+	public Population normalMakeOffspring(int genCount, int offspringSize, MersenneTwisterFast rnd) {
 		Population<MultiPittsburgh> offspring = new Population<>();
-		for(int q = 0; q < Setting.offspringSize; q++) {
+		for(int q = 0; q < offspringSize; q++) {
 			MultiPittsburgh child = null;
+
+			boolean sameParentFlag = false;	//同じ親から作られた子個体かどうか判定
 
 			while(true) {
 
@@ -113,11 +116,19 @@ public class Task {
 
 				//Step 2. Crossover
 					//GA type Selection (Michigan or Pittsburgh)
-				if(rnd.nextDouble() < (double)Consts.RULE_OPE_RT) {
+				double p;
+				if(StaticFunction.sameGeneInt(parent[0], parent[1])) {
+					p = 1.0;
+					sameParentFlag = true;	//同じ親が選ばれた
+				} else {
+					p = Consts.RULE_OPE_RT;
+					sameParentFlag = false;	//同じ親ではなかった
+				}
+
+				if(rnd.nextDouble() < p) {
 					//Michigan Type Crossover (Child Generation)
 					child = (MultiPittsburgh)GAFunctions.michiganCrossover(mop, (Pittsburgh)parent[0], rnd);
 				} else {
-					//TODO 同じ親個体（決定変数が等しい）の場合、強制でミシガン操作
 					//TODO 同じ親個体が選ばれた回数カウント
 
 					//Pittsburgh Type Crossover (Child Generation)
@@ -148,6 +159,7 @@ public class Task {
 				}
 			}
 
+			child.setGeneration(genCount+1);
 			child.ruleset2michigan();
 			child.michigan2pittsburgh();
 			child.initAppendix(this.mop.getAppendixNum());
@@ -250,6 +262,52 @@ public class Task {
 		return matingPool;
 	}
 
+	public List<MultiPittsburgh> getSortedListByComplex() {
+		Task task = this;
+		@SuppressWarnings("unchecked")
+		Population<MultiPittsburgh> pop = this.getPopulation();
+		return pop.getIndividuals().stream()
+				.sorted(new Comparator<MultiPittsburgh>() {
+					@Override
+					public int compare(MultiPittsburgh p1, MultiPittsburgh p2) {
+						int rank_p1 = p1.getRank();
+						int rank_p2 = p2.getRank();
+						int ruleNum1 = p1.getRuleNum();
+						int ruleNum2 = p2.getRuleNum();
+						int[] optimizer = task.getMOP().getOptimizer();
+						double f_p1 = p1.getFitness(0)*optimizer[0];
+						double f_p2 = p2.getFitness(0)*optimizer[0];
+
+						if(rank_p1 > rank_p2) {
+							return 1;
+						}
+						else if(rank_p1 < rank_p2) {
+							return -1;
+						}
+						else {
+							if(ruleNum1 > ruleNum2) {
+								return -1;
+							}
+							else if(ruleNum1 < ruleNum2) {
+								return 1;
+							}
+							else {
+								if(f_p1 > f_p2) {
+									return 1;
+								}
+								else if(f_p1 < f_p2) {
+									return -1;
+								}
+								else {
+									return 0;
+								}
+							}
+						}
+					}
+				}
+				).collect(Collectors.toList());
+	}
+
 	public Population makeOffspring(Population<MultiPittsburgh> matingPool, int taskNum, int numMigration, MersenneTwisterFast rnd) {
 		Population<MultiPittsburgh> offspring = new Population<>();
 
@@ -310,6 +368,82 @@ public class Task {
 			child.michigan2pittsburgh();
 			child.initAppendix(this.mop.getAppendixNum());
 			offspring.addIndividual(child);
+		}
+
+		this.manager.setOffspring(offspring);
+		return this.getOffspring();
+	}
+
+	@SuppressWarnings("unchecked")
+	public Population immigrantMakeOffspring(int genCount, ArrayList<List<MultiPittsburgh>> immigrant_list, int taskNum, int numMigration, MersenneTwisterFast rnd) {
+		//移住個体数を各タスクに配分する
+		int[] immigrantSizePerTask = new int[taskNum];
+		for(int i = 0; i < taskNum; i++) {
+			immigrantSizePerTask[i] = numMigration/taskNum;
+		}
+		if(numMigration % taskNum != 0) {	//余り分を非復元抽出でタスクを選択
+			int box = taskNum;
+			int want = numMigration % taskNum;
+			Integer[] index = StaticFunction.sampringWithout(box, want, rnd);
+			for(int i = 0; i < want; i++) {
+				immigrantSizePerTask[index[i]]++;
+			}
+		}
+
+		//タスク内遺伝的操作
+		int makeSizeInThisTask = Setting.offspringSize - numMigration;
+		Population<MultiPittsburgh> offspring = normalMakeOffspring(genCount, makeSizeInThisTask, rnd);
+
+		//タスク間遺伝的操作
+		for(int i = 0; i < taskNum; i++) {
+			for(int j = 0; j < immigrantSizePerTask[i]; j++) {
+				MultiPittsburgh child = null;
+				while(true) {
+					// Crossover
+					double p = Consts.RULE_OPE_RT;
+					if(rnd.nextDouble() < p) {
+						// Michigan-style crossover
+						MultiPittsburgh parent = immigrant_list.get(i).get(j);
+						child = (MultiPittsburgh)GAFunctions.michiganCrossover(mop, parent, rnd);
+					}
+					else {
+						// Pittsburgh-style crossover
+						// P-1. Mating Selection
+						MultiPittsburgh[] parent = new MultiPittsburgh[2];
+						parent[0] = immigrant_list.get(i).get(j);
+						int tournamentSize = 2;
+						int wantSize = 1;
+						Individual_nsga2[] sample = NSGA2.tournamentSelection(manager.getPopulation(), wantSize, tournamentSize, rnd);
+						parent[1] = (MultiPittsburgh)sample[0];
+
+						// P-2. Crossover
+						child = (MultiPittsburgh)GAFunctions.pittsburghCrossover(parent, rnd);
+					}
+
+					// Mutation
+					GAFunctions.pittsburghMutation(child, mop.getTrain(), rnd);
+
+					// Learning
+					child.getRuleSet().learning(mop.getTrain(), Setting.forkJoinPool);
+
+					// Rule Deletion
+					child.getRuleSet().removeRule();
+					child.getRuleSet().radixSort();
+					child.getRuleSet().calcRuleLength();
+
+					//If child don't have any rule, the child should not be evaluated.
+					//Then new child will be generated.
+					if(child.getRuleSet().getMicRules().size() != 0) {
+						break;
+					}
+				}
+
+				child.setGeneration(genCount+1);
+				child.ruleset2michigan();
+				child.michigan2pittsburgh();
+				child.initAppendix(this.mop.getAppendixNum());
+				offspring.addIndividual(child);
+			}
 		}
 
 		this.manager.setOffspring(offspring);

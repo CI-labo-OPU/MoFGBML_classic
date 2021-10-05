@@ -14,6 +14,7 @@ import method.MersenneTwisterFast;
 @SuppressWarnings("rawtypes")
 public abstract class Pittsburgh<T extends RuleSet> extends Individual_nsga2<Integer>{
 	// ************************************************************
+	protected int generation;
 	protected T ruleSet;
 	protected Michigan[] michigan;
 	protected int ruleNum;
@@ -74,6 +75,7 @@ public abstract class Pittsburgh<T extends RuleSet> extends Individual_nsga2<Int
 	@Override
 	public void deepCopySpecific(Object individual) {
 		Pittsburgh<T> cast = (Pittsburgh<T>)individual;
+		this.generation = cast.getGeneration();
 		this.ruleNum = cast.getRuleNum();
 		this.Ndim = cast.getNdim();
 
@@ -155,6 +157,14 @@ public abstract class Pittsburgh<T extends RuleSet> extends Individual_nsga2<Int
 			}
 
 		});
+	}
+
+	public int getGeneration() {
+		return this.generation;
+	}
+
+	public void setGeneration(int generation) {
+		this.generation = generation;
 	}
 
 	public T getRuleSet() {

@@ -58,11 +58,52 @@ public class Output {
 	public static void writeln(String fileName, String[] array){
 
 		try {
-//			FileWriter fw = new FileWriter(fileName, true);
-			FileWriter fw = new FileWriter(fileName, false);
+			FileWriter fw = new FileWriter(fileName, true);
+//			FileWriter fw = new FileWriter(fileName, false);
 			PrintWriter pw = new PrintWriter( new BufferedWriter(fw) );
 			for(int i=0; i<array.length; i++){
 				 pw.println(array[i]);
+			}
+			pw.close();
+	    }
+		catch (IOException ex){
+			ex.printStackTrace();
+	    }
+	}
+
+	/**
+	 * String用
+	 * @param fileName
+	 * @param str : String
+	 */
+	public static void write(String fileName, String str) {
+		String[] array = new String[] {str};
+		write(fileName, array);
+	}
+
+	/**
+	 * ArrayList用
+	 * @param fileName
+	 * @param strs : ArrayList{@literal <String>}
+	 */
+	public static void write(String fileName, ArrayList<String> strs) {
+		String[] array = (String[]) strs.toArray(new String[0]);
+		write(fileName, array);
+	}
+
+	/**
+	 * 配列用
+	 * @param fileName
+	 * @param array : String[]
+	 */
+	public static void write(String fileName, String[] array){
+
+		try {
+			FileWriter fw = new FileWriter(fileName, true);
+//			FileWriter fw = new FileWriter(fileName, false);
+			PrintWriter pw = new PrintWriter( new BufferedWriter(fw) );
+			for(int i=0; i<array.length; i++){
+				 pw.print(array[i]);
 			}
 			pw.close();
 	    }

@@ -27,11 +27,11 @@ public class AOF extends ScalarizeFunction{
 	 * @param id
 	 */
 	@SuppressWarnings("unchecked")
-	public AOF(int id, int patternNum) {
+	public AOF(int id, int patternNum, int Cnum) {
 		super(id, 2);	// #of objective = 2
 		this.patternNum = patternNum;
 		if(Consts.IS_AOF_VECTOR_INT) {
-			this.z = new double[] {0.0, id+1};	//(0, #of rules)
+			this.z = new double[] {0.0, id+Cnum};	//(0, #of rules)
 		}
 		else {
 			double k = (double)(id+1) * ((double)Consts.MAX_RULE_NUM / (double)Setting.populationSize);

@@ -84,6 +84,7 @@ public class MultiPittsburgh extends Pittsburgh<MultiRuleSet>{
 	@Override
 	public void deepCopySpecific(Object individual) {
 		MultiPittsburgh cast = (MultiPittsburgh)individual;
+		this.generation = cast.getGeneration();
 		this.ruleNum = cast.getRuleNum();
 		this.Ndim = cast.getNdim();
 		this.Cnum = cast.getCnum();

@@ -122,7 +122,18 @@ public class test {
 
 //		checkManyRule(args);
 
-		checkRadixSortForRule(args);
+//		checkRadixSortForRule(args);
+
+		checkAddWrite(args);
+	}
+
+	public static void checkAddWrite(String[] args) {
+		String fileName = "addWriting.txt";
+		String a = "a";
+		String b = "b";
+
+		Output.writeln(fileName, b);
+
 	}
 
 	public static void checkRadixSortForRule(String[] args) {

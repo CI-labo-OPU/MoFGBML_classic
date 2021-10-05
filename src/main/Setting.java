@@ -56,9 +56,9 @@ public class Setting {
 	/** Timing of output Population (generation based) */
 	public static int timingOutput = 1;
 	/** #of Population */
-	public static int populationSize = 100;
+	public static int populationSize = 60;
 	/** #of Offspring */
-	public static int offspringSize = 100;
+	public static int offspringSize = 60;
 	@Deprecated
 	//TODO MOPクラスで指定
 	public static int objectiveNum = 2;	// #of Objective

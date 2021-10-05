@@ -2,6 +2,7 @@ package fgbml.multitask;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import data.Input;
 import data.MultiDataSetInfo;
@@ -81,10 +82,11 @@ public class MultiTask implements Experiment {
 
 		/* ********************************************************* */
 		//各タスクの各世代における結果保持用
-		ArrayList<ArrayList<String>> individualPopulation = new ArrayList<>();
-		ArrayList<ArrayList<String>> ruleSetsPopulation = new ArrayList<>();
-		ArrayList<ArrayList<String>> individualOffspring = new ArrayList<>();
-		ArrayList<ArrayList<String>> ruleSetsOffspring = new ArrayList<>();
+//		ArrayList<ArrayList<String>> individualPopulation = new ArrayList<>();
+//		ArrayList<ArrayList<String>> ruleSetsPopulation = new ArrayList<>();
+//		ArrayList<ArrayList<String>> individualOffspring = new ArrayList<>();
+//		ArrayList<ArrayList<String>> ruleSetsOffspring = new ArrayList<>();
+//		ArrayList<String> genCounts = new ArrayList<>();
 
 		/* ********************************************************* */
 		//Generate OutputClass
@@ -117,11 +119,25 @@ public class MultiTask implements Experiment {
 
 		//0. 結果用ディレクトリ作成（マルチタスキング用）
 		this.makeResultDir(trialRoot, world.getTaskNum());
+		String[] populationDir = new String[world.getTaskNum()];
+		String[] offspringDir = new String[world.getTaskNum()];
 		for(int i = 0; i < world.getTaskNum(); i++) {
-			individualPopulation.add(new ArrayList<>());
-			ruleSetsPopulation.add(new ArrayList<>());
-			individualOffspring.add(new ArrayList<>());
-			ruleSetsOffspring.add(new ArrayList<>());
+			String taskDirName = trialRoot + sep + "task"+(i+1);
+			populationDir[i] = taskDirName + sep + Consts.POPULATION;
+			offspringDir[i] = taskDirName + sep + Consts.OFFSPRING;
+
+			String fileName;
+			String header = ((Output_MultiLabel)output).pittsburghHeader(world.getTask(i).getMOP().getObjectiveNum());
+
+			fileName = populationDir[i] + sep + "individual.csv";
+			Output.write(fileName, header);
+//			fileName = offspringDir[i] + sep + "individual.csv";
+//			Output.write(fileName, header);
+
+//			individualPopulation.add(new ArrayList<>());
+//			ruleSetsPopulation.add(new ArrayList<>());
+//			individualOffspring.add(new ArrayList<>());
+//			ruleSetsOffspring.add(new ArrayList<>());
 		}
 
 		//1. 初期個体群生成＆評価
@@ -131,24 +147,33 @@ public class MultiTask implements Experiment {
 			task.populationEvaluation();
 			task.nonDominatedSort(task.getPopulation());
 		}
-		genCount++;
-
+//		genCount++;
+		//初期個体群結果保持
+//		genCounts.add(String.valueOf(genCount));
 		for(int i = 0; i < world.getTaskNum(); i++) {
 			Task task = world.getTask(i);
+			String fileName;
 			String individual;
-			String ruleSets;
+//			String ruleSets;
 
 			//Population
 			task.calcAppendix(task.getPopulation());
+			setGeneration(genCount, task.getPopulation());
 			individual = output.outputPittsburgh(task.getPopulation());
-			ruleSets = output.outputRuleSet(task.getPopulation());
-			individualPopulation.get(i).add(individual);
-			ruleSetsPopulation.get(i).add(ruleSets);
+
+			fileName = populationDir[i] + sep + "individual.csv";
+			Output.write(fileName, individual);
+//			fileName = offspringDir[i] + sep + "individual.csv";
+//			Output.write(fileName, individual);
+
+//			ruleSets = output.outputRuleSet(task.getPopulation());
+//			individualPopulation.get(i).add(individual);
+//			ruleSetsPopulation.get(i).add(ruleSets);
 		}
-		System.out.print("0");
+//		System.out.print("0");
 
 		//2. GA Searching Frame
-		int detailCount = 1;
+		int detailCount = 0;
 		while(true) {
 			/* ********************************************************* */
 			//Output "Period" per const interval.
@@ -165,13 +190,21 @@ public class MultiTask implements Experiment {
 				break;
 			}
 			/* ********************************************************* */
-			if(genCount % intervalMigration != 0) {
-				/* 情報交換しない */
+			if(genCount % intervalMigration == (intervalMigration-1)) {
+				/* 情報交換する */
+
+				//1. 各個体群を複雑順にソートしたリストを生成
+				ArrayList<List<MultiPittsburgh>> immigrant_list = new ArrayList<>();
+				for(int i = 0; i < world.getTaskNum(); i++) {
+					//個体群を複雑順にソート
+					immigrant_list.add(world.getTask(i).getSortedListByComplex());
+				}
 
 				//2. 子個体生成
 				for(int i = 0; i < world.getTaskNum(); i++) {
 					Task task = world.getTask(i);
-					task.normalMakeOffspring(rnd);
+					task.immigrantMakeOffspring(genCount, immigrant_list, world.getTaskNum(), world.getNumMigration(), rnd);
+					task.nonDominatedSort(task.getOffspring());
 				}
 
 				//3. 子個体群評価
@@ -188,22 +221,11 @@ public class MultiTask implements Experiment {
 				}
 			}
 			else {
-				/* 情報交換する */
-
-				//TODO 個体群プール廃止→移住個体を先に決定しておく
-				//1. 親個体群プール生成
-				ArrayList<Population<MultiPittsburgh>> listPools = new ArrayList<>();
+				/* 情報交換しない */
+				//2. 子個体生成
 				for(int i = 0; i < world.getTaskNum(); i++) {
 					Task task = world.getTask(i);
-					Population<MultiPittsburgh> matingPool = task.makeMatingPool(world, rnd);
-					listPools.add(matingPool);
-				}
-
-				//2. 親個体群プールから子個体群生成
-				for(int i = 0; i < world.getTaskNum(); i++) {
-					Task task = world.getTask(i);
-					Population<MultiPittsburgh> matingPool = listPools.get(i);
-					task.makeOffspring(matingPool, world.getTaskNum(), world.getNumMigration(), rnd);
+					task.normalMakeOffspring(genCount, Setting.offspringSize, rnd);
 				}
 
 				//3. 子個体群評価
@@ -225,27 +247,35 @@ public class MultiTask implements Experiment {
 			//Output current Population & new Offspring
 			timeWatcher.stop();
 			if(genCount % Setting.timingOutput == 0) {
+//				genCounts.add(String.valueOf(genCount));
 				//Appendix Information
 				for(int i = 0; i < world.getTaskNum(); i++) {
 					Task task = world.getTask(i);
+					String fileName;
 					String individual;
 					String ruleSets;
 
 					//Population
 					task.nonDominatedSort(task.getPopulation());
 					task.calcAppendix(task.getPopulation());
+					setGeneration(genCount, task.getPopulation());
 					individual = output.outputPittsburgh(task.getPopulation());
-					ruleSets = output.outputRuleSet(task.getPopulation());
-					individualPopulation.get(i).add(individual);
-					ruleSetsPopulation.get(i).add(ruleSets);
+					fileName = populationDir[i] + sep + "individual.csv";
+					Output.write(fileName, individual);
+//					individualPopulation.get(i).add(individual);
+//					ruleSets = output.outputRuleSet(task.getPopulation());
+//					ruleSetsPopulation.get(i).add(ruleSets);
 
 					//Offspring
-					task.nonDominatedSort(task.getOffspring());
-					task.calcAppendix(task.getOffspring());
-					individual = output.outputPittsburgh(task.getOffspring());
-					ruleSets = output.outputRuleSet(task.getOffspring());
-					individualOffspring.get(i).add(individual);
-					ruleSetsOffspring.get(i).add(ruleSets);
+//					task.nonDominatedSort(task.getOffspring());
+//					task.calcAppendix(task.getOffspring());
+//					setGeneration(genCount, task.getOffspring());
+//					individual = output.outputPittsburgh(task.getOffspring());
+//					fileName = offspringDir[i] + sep + "individual.csv";
+//					Output.write(fileName, individual);
+//					individualOffspring.get(i).add(individual);
+//					ruleSets = output.outputRuleSet(task.getOffspring());
+//					ruleSetsOffspring.get(i).add(ruleSets);
 				}
 			}
 			timeWatcher.start();
@@ -261,7 +291,13 @@ public class MultiTask implements Experiment {
 		resultMaster.addEvaTimes( evaWatcher.getSec() );
 
 		// Output
-		this.output2files(trialRoot, individualPopulation, ruleSetsPopulation, individualOffspring, ruleSetsOffspring);
+//		this.output2files(trialRoot, genCounts, individualPopulation, ruleSetsPopulation, individualOffspring, ruleSetsOffspring);
+	}
+
+	public void setGeneration(int genCount, Population<MultiPittsburgh> individuals) {
+		for(int p = 0; p < individuals.getIndividuals().size(); p++) {
+			individuals.getIndividual(p).setGeneration(genCount);
+		}
 	}
 
 	public void makeResultDir(String trialRoot, int taskNum) {
@@ -272,16 +308,16 @@ public class MultiTask implements Experiment {
 			String taskDirName = trialRoot + sep + "task"+(i+1);
 			String populationDir = taskDirName + sep + Consts.POPULATION;
 			Output.mkdirs(populationDir);
-			String offspringDir = taskDirName + sep + Consts.OFFSPRING;
-			Output.mkdirs(offspringDir);
-			Output.makeDir(populationDir, Consts.INDIVIDUAL);
-			Output.makeDir(populationDir, Consts.RULESET);
-			Output.makeDir(offspringDir, Consts.INDIVIDUAL);
-			Output.makeDir(offspringDir, Consts.RULESET);
+//			String offspringDir = taskDirName + sep + Consts.OFFSPRING;
+//			Output.mkdirs(offspringDir);
+//			Output.makeDir(populationDir, Consts.INDIVIDUAL);
+//			Output.makeDir(populationDir, Consts.RULESET);
+//			Output.makeDir(offspringDir, Consts.INDIVIDUAL);
+//			Output.makeDir(offspringDir, Consts.RULESET);
 		}
 	}
 
-	public void output2files(String trialRoot,
+	public void output2files(String trialRoot, ArrayList<String> genCounts,
 			ArrayList<ArrayList<String>> individualPopulation, ArrayList<ArrayList<String>> ruleSetsPopulation,
 			ArrayList<ArrayList<String>> individualOffspring, ArrayList<ArrayList<String>> ruleSetsOffspring) {
 		String sep = File.separator;
@@ -300,22 +336,24 @@ public class MultiTask implements Experiment {
 			individual = individualPopulation.get(i);
 			ruleSets = ruleSetsPopulation.get(i);
 			for(int j = 0; j < individual.size(); j++) {
-				int genCount = j * Setting.timingOutput;
+//				int genCount = j * Setting.timingOutput;
+				String genCount = genCounts.get(j);
 				fileName = populationDir + sep + Consts.INDIVIDUAL + sep + "gen" + genCount + ".csv";
 				Output.writeln(fileName, individual.get(j));
-				fileName = populationDir + sep + Consts.RULESET + sep + "gen" + genCount + ".csv";
-				Output.writeln(fileName, ruleSets.get(j));
+//				fileName = populationDir + sep + Consts.RULESET + sep + "gen" + genCount + ".csv";
+//				Output.writeln(fileName, ruleSets.get(j));
 			}
 
 			//Offspring
 			individual = individualOffspring.get(i);
 			ruleSets = ruleSetsOffspring.get(i);
 			for(int j = 0; j < individual.size(); j++) {
-				int genCount = (j+1) * Setting.timingOutput;
+//				int genCount = (j+1) * Setting.timingOutput;
+				String genCount = genCounts.get(j+1);
 				fileName = offspringDir + sep + Consts.INDIVIDUAL + sep + "gen" + genCount + ".csv";
 				Output.writeln(fileName, individual.get(j));
-				fileName = offspringDir + sep + Consts.RULESET + sep + "gen" + genCount + ".csv";
-				Output.writeln(fileName, ruleSets.get(j));
+//				fileName = offspringDir + sep + Consts.RULESET + sep + "gen" + genCount + ".csv";
+//				Output.writeln(fileName, ruleSets.get(j));
 			}
 		}
 

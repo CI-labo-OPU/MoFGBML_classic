@@ -85,6 +85,7 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 
 			}
 
+			individual.setGeneration(0);
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
 			individual.initAppendix(mop.getAppendixNum());
@@ -104,19 +105,20 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 		for(int i = 0; i < F_.size(); i++) {
 			crowdingDistanceAssignment(F_.get(i));
 		}
-		genCount++;
-		System.out.print("0");
+//		genCount++;
+//		System.out.print("0");
 
 		// Save Initial Population
 		timeWatcher.stop();
 		//Appendix Information
+		resultMaster.addGenCounts(String.valueOf(genCount));
 		mop.setAppendix(manager.getPopulation());
 		output.savePopulationOrOffspring(manager, resultMaster, true);
 		timeWatcher.start();
 
 		/* ********************************************************* */
 		//Step 3. GA Searching Frame
-		int detailCount = 1;
+		int detailCount = 0;
 		while(true) {
 			/* ********************************************************* */
 			//Output "Period" per const interval.
@@ -194,7 +196,7 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 					resultMaster.incrementSameParentCount();
 				}
 
-
+				child.setGeneration(genCount+1);
 				child.ruleset2michigan();
 				child.michigan2pittsburgh();
 				child.initAppendix(mop.getAppendixNum());
@@ -227,6 +229,7 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 			resultMaster.addUpdatedNum(fan2021[1]);
 			if(genCount % Setting.timingOutput == 0) {
 				//Appendix Information
+				resultMaster.addGenCounts(String.valueOf(genCount));
 				//Population
 				mop.setAppendix(manager.getPopulation());
 				//Offspring
