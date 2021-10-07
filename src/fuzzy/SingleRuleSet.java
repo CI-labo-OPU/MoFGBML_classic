@@ -133,6 +133,7 @@ public class SingleRuleSet extends RuleSet<SingleRule>{
 
 			//Rule Fitness Update
 			if(doMemorizeMissPatterns) {
+				winner.addNwin();
 				if(answerClass[0] == line.getConClass()) {
 					winner.addFitness();
 					winner.addNCP();
