@@ -86,7 +86,8 @@ public abstract class Problem_MoFGBML extends FGBML<SinglePittsburgh>{
 		SingleDataSetInfo dataset = getDataSet(dataID);
 		double missRate = individual.getRuleSet().calcMissRate(dataset, doMemorizeMissPatterns[dataID]);
 		if(doMemorizeMissPatterns[dataID]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();		//勝者にならないルール削除
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -104,7 +105,8 @@ public abstract class Problem_MoFGBML extends FGBML<SinglePittsburgh>{
 		SingleDataSetInfo dataset = getDataSet(dataID);
 		double missRate = individual.getRuleSet().calcMissRateParallel(dataset, doMemorizeMissPatterns[dataID]);
 		if(doMemorizeMissPatterns[dataID]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();		//勝者にならないルール削除
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();

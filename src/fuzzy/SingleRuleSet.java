@@ -190,6 +190,7 @@ public class SingleRuleSet extends RuleSet<SingleRule>{
 
 			//Rule Fitness Update
 			if(doMemorizeMissPatterns) {
+				micRules.get(winRuleIdx).addNwin();
 				if(answerClass[0] == line.getConClass()) {
 					micRules.get(winRuleIdx).addFitness();
 					micRules.get(winRuleIdx).addNCP();
