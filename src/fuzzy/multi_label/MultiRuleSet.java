@@ -219,6 +219,7 @@ public class MultiRuleSet extends RuleSet<MultiRule>{
 
 			//Rule Fitness Update
 			if(doMemorizeMissPatterns) {
+				winner.addNwin();
 				winner.addFitness(line);
 			}
 		}
@@ -339,6 +340,7 @@ public class MultiRuleSet extends RuleSet<MultiRule>{
 
 			//Rule Fitness Update
 			if(doMemorizeMissPatterns) {
+				micRules.get(winRuleIdx).addNwin();
 				micRules.get(winRuleIdx).addFitness(line);
 			}
 		}

@@ -110,6 +110,21 @@ public abstract class RuleSet<T extends Rule> {
 		});
 	}
 
+	public void removeRuleByNwin() {
+		for(int i = 0; i < micRules.size(); i++) {
+			int head = 0;
+			while(micRules.size() > head) {
+				//(Nwin == 0)
+				if( ((Rule)micRules.get(head)).getNwin() == 0 ) {
+					micRules.remove(head);
+				}
+				else {
+					head++;
+				}
+			}
+		}
+	}
+
 	public void removeRuleByFitness() {
 		for(int i = 0; i < micRules.size(); i++) {
 			int head = 0;
