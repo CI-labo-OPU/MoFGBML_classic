@@ -134,7 +134,8 @@ public abstract class Problem_MultiLabel extends FGBML<MultiPittsburgh>{
 		}
 
 		if(doMemorizeMissPatterns[dataID]) {
-			individual.getRuleSet().removeRuleByFitness();
+//			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -174,7 +175,8 @@ public abstract class Problem_MultiLabel extends FGBML<MultiPittsburgh>{
 		}
 
 		if(doMemorizeMissPatterns[dataID]) {
-			individual.getRuleSet().removeRuleByFitness();
+//			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
