@@ -79,4 +79,47 @@ public class Population<T extends Individual> {
 	public ArrayList<T> getIndividuals(){
 		return this.individuals;
 	}
+
+
+	@Override
+	public String toString() {
+		int popSize = this.individuals.size();
+		String ln = System.lineSeparator();
+		String str = "";
+
+		str += "population:0" + ln;
+		str += this.individuals.get(0).toString() + ln;
+		str += "---" + ln;
+		for(int i = 1; i < popSize; i++) {
+			str += "population:" + i + ln;
+			str += this.individuals.get(i).toString() + ln;
+			str += "---" + ln;
+		}
+
+		return str;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

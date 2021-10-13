@@ -127,14 +127,19 @@ public class MultiTask implements Experiment {
 		this.makeResultDir(trialRoot, world.getTaskNum());
 		String[] populationDir = new String[world.getTaskNum()];
 		String[] offspringDir = new String[world.getTaskNum()];
+		String[] ruleSetDir = new String[world.getTaskNum()];
 		for(int i = 0; i < world.getTaskNum(); i++) {
 			String taskDirName = trialRoot + sep + "task"+(i+1);
 			populationDir[i] = taskDirName + sep + Consts.POPULATION;
 			offspringDir[i] = taskDirName + sep + Consts.OFFSPRING;
+			ruleSetDir[i] = taskDirName + sep + Consts.RULESET;
+			Output.mkdirs(ruleSetDir[i]);
 
 			String fileName;
-			String header = ((Output_MultiLabel)output).pittsburghHeader(world.getTask(i).getMOP().getObjectiveNum());
+			String header;
 
+			// Objective values
+			header = ((Output_MultiLabel)output).pittsburghHeader(world.getTask(i).getMOP().getObjectiveNum());
 			fileName = populationDir[i] + sep + "individual.csv";
 			Output.write(fileName, header);
 //			fileName = offspringDir[i] + sep + "individual.csv";
@@ -160,7 +165,7 @@ public class MultiTask implements Experiment {
 			Task task = world.getTask(i);
 			String fileName;
 			String individual;
-//			String ruleSets;
+			String ruleSetTxt;
 
 			//Population
 			task.calcAppendix(task.getPopulation());
@@ -171,6 +176,12 @@ public class MultiTask implements Experiment {
 			Output.write(fileName, individual);
 //			fileName = offspringDir[i] + sep + "individual.csv";
 //			Output.write(fileName, individual);
+
+			// Decision values
+			fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+			ruleSetTxt = task.getPopulation().toString();
+			Output.write(fileName, ruleSetTxt);
+
 
 //			ruleSets = output.outputRuleSet(task.getPopulation());
 //			individualPopulation.get(i).add(individual);
@@ -259,7 +270,7 @@ public class MultiTask implements Experiment {
 					Task task = world.getTask(i);
 					String fileName;
 					String individual;
-					String ruleSets;
+					String ruleSetTxt;
 
 					//Population
 					task.nonDominatedSort(task.getPopulation());
@@ -271,6 +282,11 @@ public class MultiTask implements Experiment {
 //					individualPopulation.get(i).add(individual);
 //					ruleSets = output.outputRuleSet(task.getPopulation());
 //					ruleSetsPopulation.get(i).add(ruleSets);
+
+					// Decision values
+					fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+					ruleSetTxt = task.getPopulation().toString();
+					Output.write(fileName, ruleSetTxt);
 
 					//Offspring
 //					task.nonDominatedSort(task.getOffspring());

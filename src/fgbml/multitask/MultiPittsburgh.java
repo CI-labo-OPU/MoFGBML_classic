@@ -246,4 +246,9 @@ public class MultiPittsburgh extends Pittsburgh<MultiRuleSet>{
 		return this.Cnum;
 	}
 
+	@Override
+	public String toString() {
+		return this.ruleSet.toString();
+	}
+
 }
