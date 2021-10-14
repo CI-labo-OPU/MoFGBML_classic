@@ -110,25 +110,36 @@ public class MultiTask implements Experiment {
 		MOP1 mop1 = new MOP1(Dtra, Dtst);
 		MOP2 mop2 = new MOP2(Dtra, Dtst);
 		MOP3 mop3 = new MOP3(Dtra, Dtst);
+		MOP4 mop4 = new MOP4(Dtra, Dtst);
+		MaOP maop = new MaOP(Dtra, Dtst);
 		Task task1 = new Task(0, mop1);
 		Task task2 = new Task(1, mop2);
 		Task task3 = new Task(2, mop3);
+		Task task4 = new Task(3, mop4);
+		Task task5 = new Task(4, maop);
 		world.addTask(task1);
 		world.addTask(task2);
 		world.addTask(task3);
+		world.addTask(task4);
+		world.addTask(task5);
 
 		//0. 結果用ディレクトリ作成（マルチタスキング用）
 		this.makeResultDir(trialRoot, world.getTaskNum());
 		String[] populationDir = new String[world.getTaskNum()];
 		String[] offspringDir = new String[world.getTaskNum()];
+		String[] ruleSetDir = new String[world.getTaskNum()];
 		for(int i = 0; i < world.getTaskNum(); i++) {
 			String taskDirName = trialRoot + sep + "task"+(i+1);
 			populationDir[i] = taskDirName + sep + Consts.POPULATION;
 			offspringDir[i] = taskDirName + sep + Consts.OFFSPRING;
+			ruleSetDir[i] = taskDirName + sep + Consts.RULESET;
+			Output.mkdirs(ruleSetDir[i]);
 
 			String fileName;
-			String header = ((Output_MultiLabel)output).pittsburghHeader(world.getTask(i).getMOP().getObjectiveNum());
+			String header;
 
+			// Objective values
+			header = ((Output_MultiLabel)output).pittsburghHeader(world.getTask(i).getMOP().getObjectiveNum());
 			fileName = populationDir[i] + sep + "individual.csv";
 			Output.write(fileName, header);
 //			fileName = offspringDir[i] + sep + "individual.csv";
@@ -154,7 +165,7 @@ public class MultiTask implements Experiment {
 			Task task = world.getTask(i);
 			String fileName;
 			String individual;
-//			String ruleSets;
+			String ruleSetTxt;
 
 			//Population
 			task.calcAppendix(task.getPopulation());
@@ -165,6 +176,12 @@ public class MultiTask implements Experiment {
 			Output.write(fileName, individual);
 //			fileName = offspringDir[i] + sep + "individual.csv";
 //			Output.write(fileName, individual);
+
+//			// Decision values
+//			fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+//			ruleSetTxt = task.getPopulation().toString();
+//			Output.write(fileName, ruleSetTxt);
+
 
 //			ruleSets = output.outputRuleSet(task.getPopulation());
 //			individualPopulation.get(i).add(individual);
@@ -204,7 +221,7 @@ public class MultiTask implements Experiment {
 				for(int i = 0; i < world.getTaskNum(); i++) {
 					Task task = world.getTask(i);
 					task.immigrantMakeOffspring(genCount, immigrant_list, world.getTaskNum(), world.getNumMigration(), rnd);
-					task.nonDominatedSort(task.getOffspring());
+//TODO					task.nonDominatedSort(task.getOffspring());
 				}
 
 				//3. 子個体群評価
@@ -253,7 +270,7 @@ public class MultiTask implements Experiment {
 					Task task = world.getTask(i);
 					String fileName;
 					String individual;
-					String ruleSets;
+					String ruleSetTxt;
 
 					//Population
 					task.nonDominatedSort(task.getPopulation());
@@ -265,6 +282,11 @@ public class MultiTask implements Experiment {
 //					individualPopulation.get(i).add(individual);
 //					ruleSets = output.outputRuleSet(task.getPopulation());
 //					ruleSetsPopulation.get(i).add(ruleSets);
+
+//					// Decision values
+//					fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+//					ruleSetTxt = task.getPopulation().toString();
+//					Output.write(fileName, ruleSetTxt);
 
 					//Offspring
 //					task.nonDominatedSort(task.getOffspring());
@@ -278,8 +300,19 @@ public class MultiTask implements Experiment {
 //					ruleSetsOffspring.get(i).add(ruleSets);
 				}
 			}
+
 			timeWatcher.start();
 		}
+
+		timeWatcher.stop();
+		for(int i = 0; i < world.getTaskNum(); i++) {
+			Task task = world.getTask(i);
+			// Decision values
+			String fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+			String ruleSetTxt = task.getPopulation().toString();
+			Output.write(fileName, ruleSetTxt);
+		}
+		timeWatcher.start();
 
 		/* ********************************************************* */
 		/* ********************************************************* */

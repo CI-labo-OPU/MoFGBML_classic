@@ -173,6 +173,9 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 		resultMaster.addGenCounts(String.valueOf(genCount));
 		mop.setAppendix(manager.getPopulation());
 		output.savePopulationOrOffspring(manager, resultMaster, true);
+		String fileName = resultMaster.getTrialRoot() + sep + Consts.RULESET + sep + "gen"+genCount+".txt";
+		String ruleSetTxt = manager.getPopulation().toString();
+		Output.write(fileName, ruleSetTxt);
 		timeWatcher.start();
 
 		//Step 1.5. EP Initialization
@@ -336,6 +339,10 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 //				individualEP.add(detail[0]);
 //				ruleSetEP.add(detail[1]);
 				saveZ.add(transformZ(z));
+
+				fileName = resultMaster.getTrialRoot() + sep + Consts.RULESET + sep + "gen"+genCount+".txt";
+				ruleSetTxt = manager.getPopulation().toString();
+				Output.write(fileName, ruleSetTxt);
 			}
 			timeWatcher.start();
 		}
@@ -345,7 +352,7 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 		timeWatcher.stop();
 		//Output method for EP.
 //		outputEP(EPDir, resultMaster.getGenCounts(), individualEP, ruleSetEP);
-		String fileName = resultMaster.getTrialRoot() + sep + "ideal.csv";
+		fileName = resultMaster.getTrialRoot() + sep + "ideal.csv";
 		Output.writeln(fileName, saveZ);
 		timeWatcher.start();
 

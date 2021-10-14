@@ -99,6 +99,7 @@ public class Output_MultiLabel extends OutputClass<MultiPittsburgh>{
 		return strs;
 	}
 
+
 	@Override
 	public String outputRuleSet(Population<MultiPittsburgh> population) {
 		String ln = System.lineSeparator();

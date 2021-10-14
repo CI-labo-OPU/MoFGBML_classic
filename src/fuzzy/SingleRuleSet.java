@@ -281,5 +281,42 @@ public class SingleRuleSet extends RuleSet<SingleRule>{
 
 	/****************/
 
+	@Override
+	public String toString() {
+		String ln = System.lineSeparator();
+		String str = "";
+
+		for(int i = 0; i < this.micRules.size(); i++) {
+			str += micRules.get(i).toString() + ln;
+		}
+
+		return str;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

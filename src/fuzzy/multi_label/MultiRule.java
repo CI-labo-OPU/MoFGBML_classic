@@ -150,6 +150,78 @@ public class MultiRule extends Rule{
 		return this.cfVector[index];
 	}
 
+	@Override
+	public String toString() {
+		int Ndim = this.rule.length;
+		int Cnum = this.conclusion.length;
+
+		String str = "";
+
+		// Antecedent
+		str += "If [";
+		str += this.rule[0];
+		for(int i = 1; i < Ndim; i++) {
+			str += ", " + this.rule[i];
+		}
+		str += "] ";
+
+		// Consequent
+		str += "Then ";
+			// ClassLabel
+		str += "class:[";
+		str += this.conclusion[0];
+		for(int i = 1; i < Cnum; i++) {
+			str += ", " + this.conclusion[i];
+		}
+		str += "] ";
+			// RuleWeight
+		str += "CFmean:[" + this.cf + "] ";
+		str += "CFvector:[";
+		str += this.cfVector[0];
+		for(int i = 1; i < Cnum; i++) {
+			str += ", " + this.cfVector[i];
+		}
+		str += "]";
+
+		// Attributes
+		// Nwin
+		str += " Nwin:[" + this.Nwin + "]";
+		// ncp
+		str += " ncp:[" + this.ncp + "]";
+		// nmp
+		str += " nmp:[" + this.nmp + "]";
+		// fitness
+		str += " fitness:[" + this.fitness + "]";
+
+		return str;
+	}
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

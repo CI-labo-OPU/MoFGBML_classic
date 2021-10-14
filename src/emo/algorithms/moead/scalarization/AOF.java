@@ -31,7 +31,8 @@ public class AOF extends ScalarizeFunction{
 		super(id, 2);	// #of objective = 2
 		this.patternNum = patternNum;
 		if(Consts.IS_AOF_VECTOR_INT) {
-			this.z = new double[] {0.0, id+Cnum};	//(0, #of rules)
+			this.z = new double[] {0.0, id};		//(0, #of rules)
+//			this.z = new double[] {0.0, id+Cnum};	//Cnumスタート
 		}
 		else {
 			double k = (double)(id+1) * ((double)Consts.MAX_RULE_NUM / (double)Setting.populationSize);

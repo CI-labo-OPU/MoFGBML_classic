@@ -77,7 +77,62 @@ public class SingleRule extends Rule{
 		return this.conclusion[0];
 	}
 
+	@Override
+	public String toString() {
+		int Ndim = this.rule.length;
+
+		String str = "";
+
+		// Antecedent
+		str += "If [";
+		str += this.rule[0];
+		for(int i = 0; i < 1; i++) {
+			str += ", " + this.rule[i];
+		}
+		str += "] ";
+
+		// Consequent
+		str += "Then ";
+		str += "class:[";
+		str += this.conclusion[0];
+		str += "]";
+		str += " ";
+		str += "weight:[";
+		str += this.cf;
+		str += "]";
+
+		//Attributes
+		// Nwin
+		str += " Nwin:[" + this.Nwin + "]";
+		// ncp
+		str += " ncp:[" + this.ncp + "]";
+		// nmp
+		str += " nmp:[" + this.nmp + "]";
+		// fitness
+		str += " fitness:[" + this.fitness + "]";
+
+		return str;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

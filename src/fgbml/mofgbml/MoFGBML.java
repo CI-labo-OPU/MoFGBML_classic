@@ -48,6 +48,8 @@ public class MoFGBML implements Experiment {
 		Output.makeDir(populationDir, Consts.RULESET);
 		Output.makeDir(offspringDir, Consts.INDIVIDUAL);
 		Output.makeDir(offspringDir, Consts.RULESET);
+		String ruleSetDir = resultMaster.getTrialRoot() + sep + Consts.RULESET;
+		Output.mkdirs(ruleSetDir);
 
 		/* ********************************************************* */
 		//Initialize Fuzzy Sets
