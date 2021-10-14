@@ -110,18 +110,18 @@ public class MultiTask implements Experiment {
 		MOP1 mop1 = new MOP1(Dtra, Dtst);
 		MOP2 mop2 = new MOP2(Dtra, Dtst);
 		MOP3 mop3 = new MOP3(Dtra, Dtst);
-//		MOP4 mop4 = new MOP4(Dtra, Dtst);
-//		MaOP maop = new MaOP(Dtra, Dtst);
+		MOP4 mop4 = new MOP4(Dtra, Dtst);
+		MaOP maop = new MaOP(Dtra, Dtst);
 		Task task1 = new Task(0, mop1);
 		Task task2 = new Task(1, mop2);
 		Task task3 = new Task(2, mop3);
-//		Task task4 = new Task(3, mop4);
-//		Task task5 = new Task(4, maop);
+		Task task4 = new Task(3, mop4);
+		Task task5 = new Task(4, maop);
 		world.addTask(task1);
 		world.addTask(task2);
 		world.addTask(task3);
-//		world.addTask(task4);
-//		world.addTask(task5);
+		world.addTask(task4);
+		world.addTask(task5);
 
 		//0. 結果用ディレクトリ作成（マルチタスキング用）
 		this.makeResultDir(trialRoot, world.getTaskNum());
@@ -177,10 +177,10 @@ public class MultiTask implements Experiment {
 //			fileName = offspringDir[i] + sep + "individual.csv";
 //			Output.write(fileName, individual);
 
-			// Decision values
-			fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
-			ruleSetTxt = task.getPopulation().toString();
-			Output.write(fileName, ruleSetTxt);
+//			// Decision values
+//			fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+//			ruleSetTxt = task.getPopulation().toString();
+//			Output.write(fileName, ruleSetTxt);
 
 
 //			ruleSets = output.outputRuleSet(task.getPopulation());
@@ -283,10 +283,10 @@ public class MultiTask implements Experiment {
 //					ruleSets = output.outputRuleSet(task.getPopulation());
 //					ruleSetsPopulation.get(i).add(ruleSets);
 
-					// Decision values
-					fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
-					ruleSetTxt = task.getPopulation().toString();
-					Output.write(fileName, ruleSetTxt);
+//					// Decision values
+//					fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+//					ruleSetTxt = task.getPopulation().toString();
+//					Output.write(fileName, ruleSetTxt);
 
 					//Offspring
 //					task.nonDominatedSort(task.getOffspring());
@@ -300,8 +300,19 @@ public class MultiTask implements Experiment {
 //					ruleSetsOffspring.get(i).add(ruleSets);
 				}
 			}
+
 			timeWatcher.start();
 		}
+
+		timeWatcher.stop();
+		for(int i = 0; i < world.getTaskNum(); i++) {
+			Task task = world.getTask(i);
+			// Decision values
+			String fileName = ruleSetDir[i] + sep + "gen" + genCount + ".txt";
+			String ruleSetTxt = task.getPopulation().toString();
+			Output.write(fileName, ruleSetTxt);
+		}
+		timeWatcher.start();
 
 		/* ********************************************************* */
 		/* ********************************************************* */

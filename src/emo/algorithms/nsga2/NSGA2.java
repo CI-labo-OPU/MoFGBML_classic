@@ -1,5 +1,6 @@
 package emo.algorithms.nsga2;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +18,7 @@ import ga.PopulationManager;
 import main.Consts;
 import main.Setting;
 import method.MersenneTwisterFast;
+import method.Output;
 import method.ResultMaster;
 import method.Sort;
 import method.StaticFunction;
@@ -45,6 +47,7 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 						TimeWatcher timeWatcher, TimeWatcher evaWatcher) {
 		/* ********************************************************* */
 		//START:
+		String sep = File.separator;
 
 		int Ndim = mop.getTrain().getNdim();
 		int genCount = 0;	//Generation Count
@@ -114,6 +117,9 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 		resultMaster.addGenCounts(String.valueOf(genCount));
 		mop.setAppendix(manager.getPopulation());
 		output.savePopulationOrOffspring(manager, resultMaster, true);
+		String fileName = resultMaster.getTrialRoot() + sep + Consts.RULESET + sep + "gen"+genCount+".txt";
+		String ruleSetTxt = manager.getPopulation().toString();
+		Output.write(fileName, ruleSetTxt);
 		timeWatcher.start();
 
 		/* ********************************************************* */
@@ -239,6 +245,11 @@ public class NSGA2<T extends Pittsburgh> extends Algorithm<T>{
 				output.savePopulationOrOffspring(manager, resultMaster, true);
 				//Save Offspring
 				output.savePopulationOrOffspring(manager, resultMaster, false);
+
+				//Save RuleSet Information
+				fileName = resultMaster.getTrialRoot() + sep + Consts.RULESET + sep + "gen"+genCount+".txt";
+				ruleSetTxt = manager.getPopulation().toString();
+				Output.write(fileName, ruleSetTxt);
 			}
 			timeWatcher.start();
 		}

@@ -276,4 +276,10 @@ public class SinglePittsburgh extends Pittsburgh<SingleRuleSet>{
 //		return this.michigan[index];
 //	}
 
+	@Override
+	public String toString() {
+		return this.ruleSet.toString();
+	}
+
+
 }
