@@ -291,10 +291,6 @@ public class MOEA_D<T extends Pittsburgh> extends Algorithm<T>{
 				evaWatcher.stop();
 				evaCount++;
 
-				if(child.getRuleNum() == 0) {
-					System.out.println();
-				}
-
 				//Step 2.3. Update of z
 				StaticMOEAD.updateIdeal(z, child);
 				StaticMOEAD.updateNadir(e, child);
