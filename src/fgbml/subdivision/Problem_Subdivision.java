@@ -65,7 +65,8 @@ public abstract class Problem_Subdivision extends FGBML<SinglePittsburgh>{
 	public double traMissRateParallel(SinglePittsburgh individual) {
 		double missRate = individual.getRuleSet().calcMissRateParallel(Dtra, doMemorizeMissPatterns[0]);
 		if(doMemorizeMissPatterns[0]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -81,7 +82,8 @@ public abstract class Problem_Subdivision extends FGBML<SinglePittsburgh>{
 	public double tstMissRate(SinglePittsburgh individual) {
 		double missRate = individual.getRuleSet().calcMissRate(Dtst, doMemorizeMissPatterns[1]);
 		if(doMemorizeMissPatterns[1]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -97,7 +99,8 @@ public abstract class Problem_Subdivision extends FGBML<SinglePittsburgh>{
 	public double tstMissRateParallel(SinglePittsburgh individual) {
 		double missRate = individual.getRuleSet().calcMissRateParallel(Dtst, doMemorizeMissPatterns[1]);
 		if(doMemorizeMissPatterns[1]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -114,7 +117,8 @@ public abstract class Problem_Subdivision extends FGBML<SinglePittsburgh>{
 	public double subtraMissRate(SinglePittsburgh individual) {
 		double missRate = individual.getRuleSet().calcMissRate(Dsubtra, doMemorizeMissPatterns[2]);
 		if(doMemorizeMissPatterns[2]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -130,7 +134,8 @@ public abstract class Problem_Subdivision extends FGBML<SinglePittsburgh>{
 	public double subtraMissRateParallel(SinglePittsburgh individual) {
 		double missRate = individual.getRuleSet().calcMissRateParallel(Dsubtra, doMemorizeMissPatterns[2]);
 		if(doMemorizeMissPatterns[2]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -146,7 +151,8 @@ public abstract class Problem_Subdivision extends FGBML<SinglePittsburgh>{
 	public double validMissRate(SinglePittsburgh individual) {
 		double missRate = individual.getRuleSet().calcMissRate(Dvalid, doMemorizeMissPatterns[3]);
 		if(doMemorizeMissPatterns[3]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
@@ -162,7 +168,8 @@ public abstract class Problem_Subdivision extends FGBML<SinglePittsburgh>{
 	public double validMissRateParallel(SinglePittsburgh individual) {
 		double missRate = individual.getRuleSet().calcMissRateParallel(Dvalid, doMemorizeMissPatterns[3]);
 		if(doMemorizeMissPatterns[3]) {
-			individual.getRuleSet().removeRuleByFitness();
+			individual.getRuleSet().removeRuleByNwin();
+//			individual.getRuleSet().removeRuleByFitness();
 			individual.getRuleSet().calcRuleLength();
 			individual.ruleset2michigan();
 			individual.michigan2pittsburgh();
