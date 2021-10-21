@@ -103,7 +103,7 @@ public class Consts {
     public static int AOF = 5;
     /** 2019.12. Trial Scalarize Function */
     public static int AOF2 = 6;
-    public static boolean IS_AOF_VECTOR_INT = false;	//AOFのベクトルを書くルール数で固定する（これをすると島モデルやりづらい）
+    public static boolean IS_AOF_VECTOR_INT = true;	//AOFのベクトルを書くルール数で固定する（これをすると島モデルやりづらい）
 	public static boolean DO_NORMALIZE = false;	//正規化するかどうか
     public static boolean IS_BIAS_VECTOR = false;	//false: NObiasVector, true: biasVector
 
