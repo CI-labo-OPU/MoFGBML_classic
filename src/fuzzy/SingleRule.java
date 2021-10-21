@@ -86,7 +86,7 @@ public class SingleRule extends Rule{
 		// Antecedent
 		str += "If [";
 		str += this.rule[0];
-		for(int i = 0; i < 1; i++) {
+		for(int i = 1; i < Ndim; i++) {
 			str += ", " + this.rule[i];
 		}
 		str += "] ";
